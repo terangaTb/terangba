@@ -3,7 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
 import heroImg from "@/assets/hero.jpg";
-import { ArrowRight, Package, Truck, Wrench, Globe2, Lightbulb, ShieldCheck } from "lucide-react";
+import { ArrowRight, Package, Truck, Wrench, Globe2, Lightbulb, ShieldCheck, CheckCircle2, Star, Quote, Building2, Factory, Wheat, Beef, Cookie, Milk } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -109,6 +109,168 @@ function Home() {
               <p className="mt-2 text-sm text-muted-foreground">{s.d}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Présentation */}
+      <section className="bg-secondary/30">
+        <div className="container mx-auto grid gap-12 px-4 py-20 lg:grid-cols-2 lg:items-center">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-gold">Qui sommes-nous</span>
+            <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
+              Un pont industriel entre l'Afrique et le monde
+            </h2>
+            <p className="mt-5 text-muted-foreground">
+              Basée à Dakar, <strong className="text-foreground">Teranga Bridge Africa</strong> accompagne les industries
+              agroalimentaires africaines dans leur croissance. Grâce à un réseau international de partenaires fiables,
+              nous garantissons un approvisionnement compétitif et une logistique maîtrisée du sourcing à la livraison.
+            </p>
+            <ul className="mt-6 space-y-3">
+              {[
+                "Sourcing international rigoureux et tracé",
+                "Conformité réglementaire et qualité certifiée",
+                "Présence locale au Sénégal et en Afrique de l'Ouest",
+                "Engagement durable et innovation continue",
+              ].map((p) => (
+                <li key={p} className="flex items-start gap-3 text-sm">
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+            <Link
+              to="/a-propos"
+              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:gap-3 transition-all"
+            >
+              En savoir plus sur nous <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { icon: Wheat, t: "Céréales & farines" },
+              { icon: Beef, t: "Protéines" },
+              { icon: Milk, t: "Produits laitiers" },
+              { icon: Cookie, t: "Ingrédients" },
+            ].map((c) => (
+              <div
+                key={c.t}
+                className="flex flex-col items-center justify-center gap-3 rounded-xl border border-border bg-card p-8 text-center shadow-sm"
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[image:var(--gradient-gold)] text-gold-foreground shadow-[var(--shadow-gold)]">
+                  <c.icon className="h-7 w-7" />
+                </div>
+                <span className="text-sm font-semibold">{c.t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pourquoi Teranga Bridge Africa */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="text-xs font-bold uppercase tracking-widest text-gold">Pourquoi nous choisir</span>
+          <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
+            Pourquoi Teranga Bridge Africa ?
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            Cinq raisons concrètes de nous faire confiance pour vos approvisionnements industriels.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {[
+            { n: "01", t: "Expertise sectorielle", d: "Une connaissance fine des marchés agroalimentaires africains et internationaux." },
+            { n: "02", t: "Réseau éprouvé", d: "Plus de 50 partenaires industriels et logistiques sélectionnés pour leur fiabilité." },
+            { n: "03", t: "Réactivité", d: "Devis sous 48h et accompagnement personnalisé à chaque étape de votre projet." },
+            { n: "04", t: "Conformité totale", d: "Respect strict des normes douanières, sanitaires et environnementales." },
+            { n: "05", t: "Prix compétitifs", d: "Volumes négociés et logistique optimisée pour des coûts maîtrisés." },
+            { n: "06", t: "Vision durable", d: "Des solutions pensées pour le développement long terme du secteur africain." },
+          ].map((r) => (
+            <div
+              key={r.n}
+              className="group relative overflow-hidden rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-elegant)]"
+            >
+              <span className="font-display text-5xl font-bold text-primary/10 transition-colors group-hover:text-primary/20">
+                {r.n}
+              </span>
+              <h3 className="mt-2 font-display text-lg font-semibold">{r.t}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{r.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Témoignages */}
+      <section className="bg-secondary/30 py-20">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="text-xs font-bold uppercase tracking-widest text-gold">Témoignages</span>
+            <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
+              Ce que disent nos partenaires
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              Des industriels nous font confiance pour sécuriser leurs approvisionnements.
+            </p>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                q: "Un partenaire fiable et réactif. Les délais sont toujours respectés et la qualité au rendez-vous.",
+                n: "Aminata D.",
+                r: "Directrice Achats, Industrie agroalimentaire",
+              },
+              {
+                q: "L'accompagnement de Teranga Bridge nous a permis d'optimiser notre chaîne d'approvisionnement.",
+                n: "Mamadou S.",
+                r: "Responsable Production, Minoterie",
+              },
+              {
+                q: "Une équipe à l'écoute, des prix compétitifs et un vrai souci de la qualité. Hautement recommandé.",
+                n: "Fatou N.",
+                r: "Gérante, Transformation alimentaire",
+              },
+            ].map((t) => (
+              <figure
+                key={t.n}
+                className="relative rounded-xl border border-border bg-card p-6 shadow-sm"
+              >
+                <Quote className="absolute right-5 top-5 h-8 w-8 text-gold/20" />
+                <div className="flex gap-1 text-gold">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-current" />
+                  ))}
+                </div>
+                <blockquote className="mt-4 text-sm leading-relaxed text-foreground">"{t.q}"</blockquote>
+                <figcaption className="mt-5 border-t border-border pt-4">
+                  <div className="font-semibold text-sm">{t.n}</div>
+                  <div className="text-xs text-muted-foreground">{t.r}</div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
+          {/* Clients potentiels / secteurs */}
+          <div className="mt-16">
+            <p className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              Ils nous font confiance — secteurs servis
+            </p>
+            <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+              {[
+                { icon: Factory, t: "Minoteries" },
+                { icon: Building2, t: "Industries laitières" },
+                { icon: Package, t: "Conditionneurs" },
+                { icon: Wheat, t: "Boulangeries industrielles" },
+              ].map((c) => (
+                <div
+                  key={c.t}
+                  className="flex items-center justify-center gap-3 rounded-lg border border-border bg-card px-4 py-5 text-center"
+                >
+                  <c.icon className="h-5 w-5 text-primary" />
+                  <span className="text-sm font-medium text-muted-foreground">{c.t}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
