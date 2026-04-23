@@ -38,13 +38,20 @@ function Contact() {
       return;
     }
     setSending(true);
-    const subject = encodeURIComponent(`Demande de ${r.data.name}`);
-    const body = encodeURIComponent(`${r.data.message}\n\n— ${r.data.name} (${r.data.email})`);
-    window.location.href = `mailto:contact@terangabridgeafrica.com?subject=${subject}&body=${body}`;
-    setTimeout(() => {
+    void (async () => {
+      const { error } = await supabase.from("contact_requests").insert({
+        name: r.data.name,
+        email: r.data.email,
+        message: r.data.message,
+      });
       setSending(false);
-      toast.success("Votre client mail s'est ouvert. Merci !");
-    }, 800);
+      if (error) {
+        toast.error("Une erreur est survenue. Réessayez.");
+        return;
+      }
+      toast.success("Votre demande a bien été envoyée. Merci !");
+      setForm({ name: "", email: "", message: "" });
+    })();
   }
 
   return (
