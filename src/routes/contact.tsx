@@ -7,6 +7,7 @@ import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { MapPin, Phone, Mail, Send } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
