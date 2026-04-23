@@ -31,9 +31,9 @@ export function Footer() {
         <div>
           <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-foreground">Contact</h4>
           <ul className="space-y-3 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-gold" /> Sacré Cœur 3 VDN, 57, Dakar, Sénégal</li>
-            <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-gold" /> +221 33 892 07 21</li>
-            <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-gold" /> contact@terangabridgeafrica.com</li>
+            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-gold" /><span>Sacré Cœur 3 VDN, 57, Dakar, Sénégal</span></li>
+            <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-gold" /><span>+221 33 892 07 21</span></li>
+            <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-gold" /><span>contact@terangabridgeafrica.com</span></li>
           </ul>
         </div>
 
