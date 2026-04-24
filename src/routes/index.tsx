@@ -60,6 +60,11 @@ function Home() {
                 Nous contacter
               </Link>
             </div>
+            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-white/80">
+              <a href="#services" className="transition-colors hover:text-gold">↓ Nos services</a>
+              <a href="#engagements" className="transition-colors hover:text-gold">↓ Engagements</a>
+              <a href="#contact" className="transition-colors hover:text-gold">↓ Contact</a>
+            </div>
           </div>
         </div>
       </section>
@@ -85,7 +90,7 @@ function Home() {
       </section>
 
       {/* Services preview */}
-      <section className="container mx-auto px-4 py-20">
+      <section id="services" className="container mx-auto px-4 py-20 scroll-mt-20">
         <div className="mx-auto max-w-2xl text-center">
           <span className="text-xs font-bold uppercase tracking-widest text-gold">Nos expertises</span>
           <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">Des solutions complètes pour l'industrie</h2>
@@ -171,7 +176,7 @@ function Home() {
       </section>
 
       {/* Pourquoi Teranga Bridge Africa */}
-      <section className="container mx-auto px-4 py-20">
+      <section id="engagements" className="container mx-auto px-4 py-20 scroll-mt-20">
         <div className="mx-auto max-w-2xl text-center">
           <span className="text-xs font-bold uppercase tracking-widest text-gold">Pourquoi nous choisir</span>
           <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
@@ -279,7 +284,7 @@ function Home() {
       </section>
 
       {/* CTA */}
-      <section className="container mx-auto px-4 pb-20">
+      <section id="contact" className="container mx-auto px-4 pb-20 scroll-mt-20">
         <div className="relative overflow-hidden rounded-2xl bg-[image:var(--gradient-primary)] px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
           <h2 className="font-display text-3xl font-bold text-primary-foreground md:text-4xl">
             Prêt à sécuriser vos approvisionnements ?
