@@ -60,6 +60,11 @@ function Home() {
                 Nous contacter
               </Link>
             </div>
+            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-white/80">
+              <a href="#services" className="transition-colors hover:text-gold">↓ Nos services</a>
+              <a href="#engagements" className="transition-colors hover:text-gold">↓ Engagements</a>
+              <a href="#contact" className="transition-colors hover:text-gold">↓ Contact</a>
+            </div>
           </div>
         </div>
       </section>
