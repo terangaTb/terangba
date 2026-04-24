@@ -85,7 +85,7 @@ function Home() {
       </section>
 
       {/* Services preview */}
-      <section className="container mx-auto px-4 py-20">
+      <section id="services" className="container mx-auto px-4 py-20 scroll-mt-20">
         <div className="mx-auto max-w-2xl text-center">
           <span className="text-xs font-bold uppercase tracking-widest text-gold">Nos expertises</span>
           <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">Des solutions complètes pour l'industrie</h2>
