@@ -64,6 +64,9 @@ function Home() {
         </div>
       </section>
 
+      {/* SENEFOOD 2026 Banner */}
+      <SenefoodBanner />
+
       {/* Stats */}
       <section className="border-y border-border bg-secondary/40">
         <div className="container mx-auto grid grid-cols-2 gap-6 px-4 py-10 md:grid-cols-4">
