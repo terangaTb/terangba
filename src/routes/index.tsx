@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { SenefoodBanner } from "@/components/SenefoodBanner";
 import heroImg from "@/assets/hero.jpg";
+import videoPoster from "@/assets/video-poster.jpg";
 import { ArrowRight, Package, Truck, Wrench, Globe2, Lightbulb, ShieldCheck, CheckCircle2, Star, Quote, Building2, Factory, Wheat, Beef, Cookie, Milk } from "lucide-react";
 
 export const Route = createFileRoute("/")({
