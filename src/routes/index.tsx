@@ -72,6 +72,44 @@ function Home() {
       {/* SENEFOOD 2026 Banner */}
       <SenefoodBanner />
 
+      {/* Vidéo TBA */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="mx-auto max-w-5xl">
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="text-xs font-bold uppercase tracking-widest text-gold">Notre dynamique</span>
+            <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
+              L'impact se construit par l'action
+            </h2>
+          </div>
+          <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-center">
+            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-elegant)]">
+              <video
+                src="/tba.mp4"
+                controls
+                playsInline
+                preload="metadata"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="space-y-5 text-muted-foreground">
+              <p className="leading-relaxed">
+                Chez <strong className="text-foreground">TBA</strong>, nous croyons que l'impact se construit par
+                l'action, l'innovation et l'engagement collectif.
+              </p>
+              <p className="leading-relaxed">
+                Cette vidéo illustre notre vision, notre énergie et surtout les personnes qui font avancer nos
+                projets au quotidien.
+              </p>
+              <p className="leading-relaxed">
+                👉 Merci à toutes celles et ceux qui contribuent à cette dynamique.
+                <br />
+                <span className="font-semibold text-foreground">L'aventure continue.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Stats */}
       <section className="border-y border-border bg-secondary/40">
         <div className="container mx-auto grid grid-cols-2 gap-6 px-4 py-10 md:grid-cols-4">
