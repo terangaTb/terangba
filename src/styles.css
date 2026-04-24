@@ -83,6 +83,7 @@
   }
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5rem; /* Header sticky h-16 (64px) + marge */
   }
   body {
     background-color: var(--color-background);
