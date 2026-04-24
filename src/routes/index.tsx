@@ -89,7 +89,7 @@ function Home() {
                   controls
                   playsInline
                   preload="none"
-                  poster={heroImg}
+                  poster={videoPoster}
                   className="absolute inset-0 h-full w-full object-cover"
                   controlsList="nodownload"
                 >
