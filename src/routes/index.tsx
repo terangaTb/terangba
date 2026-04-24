@@ -83,13 +83,19 @@ function Home() {
           </div>
           <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-center">
             <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-elegant)]">
-              <video
-                src="/tba.mp4"
-                controls
-                playsInline
-                preload="metadata"
-                className="h-full w-full object-cover"
-              />
+              <div className="relative aspect-video w-full bg-secondary/40">
+                <video
+                  controls
+                  playsInline
+                  preload="none"
+                  poster={heroImg}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  controlsList="nodownload"
+                >
+                  <source src="/tba.mp4" type="video/mp4" />
+                  Votre navigateur ne prend pas en charge la lecture vidéo.
+                </video>
+              </div>
             </div>
             <div className="space-y-5 text-muted-foreground">
               <p className="leading-relaxed">
