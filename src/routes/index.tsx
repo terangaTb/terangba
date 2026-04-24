@@ -279,7 +279,7 @@ function Home() {
       </section>
 
       {/* CTA */}
-      <section className="container mx-auto px-4 pb-20">
+      <section id="contact" className="container mx-auto px-4 pb-20 scroll-mt-20">
         <div className="relative overflow-hidden rounded-2xl bg-[image:var(--gradient-primary)] px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
           <h2 className="font-display text-3xl font-bold text-primary-foreground md:text-4xl">
             Prêt à sécuriser vos approvisionnements ?
