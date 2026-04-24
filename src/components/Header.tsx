@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import logo from "@/assets/logo.jpg";
 
 const links = [
   { to: "/", label: "Accueil" },
@@ -16,13 +17,11 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-[image:var(--gradient-primary)] font-display text-lg font-bold text-primary-foreground shadow-[var(--shadow-elegant)]">
-            T
-          </span>
-          <span className="flex flex-col leading-tight">
-            <span className="font-display text-sm font-bold text-foreground">Teranga Bridge</span>
-            <span className="text-[10px] font-medium uppercase tracking-widest text-gold">Africa</span>
-          </span>
+          <img
+            src={logo}
+            alt="Teranga Bridge Africa"
+            className="h-11 w-auto rounded-md object-contain"
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
