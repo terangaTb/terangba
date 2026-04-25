@@ -2,7 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
-import aboutHero from "@/assets/about-hero.jpg";
+import aboutHero from "@/assets/about-hero-1280.jpg";
+import aboutHero768Webp from "@/assets/about-hero-768.webp";
+import aboutHero1280Webp from "@/assets/about-hero-1280.webp";
+import aboutHero1920Webp from "@/assets/about-hero-1920.webp";
+import aboutHero768Jpg from "@/assets/about-hero-768.jpg";
+import aboutHero1280Jpg from "@/assets/about-hero-1280.jpg";
+import aboutHero1920Jpg from "@/assets/about-hero-1920.jpg";
 import {
   Target,
   Eye,
