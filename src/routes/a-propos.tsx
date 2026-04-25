@@ -347,12 +347,13 @@ function About() {
               { v: "200+", l: "Clients industriels", icon: Users },
               { v: "50+", l: "Partenaires fiables", icon: Handshake },
               { v: "48h", l: "Délai moyen de devis", icon: TrendingUp },
-            ].map((s) => (
+            ].map((s, i) => (
               <div
                 key={s.l}
-                className="rounded-2xl border border-border bg-card p-6 text-center shadow-sm"
+                className="group rounded-2xl border border-border bg-card p-6 text-center shadow-sm hover-lift reveal-on-scroll"
+                style={{ animationDelay: `${i * 0.08}s` }}
               >
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[image:var(--gradient-gold)] text-gold-foreground shadow-[var(--shadow-gold)]">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[image:var(--gradient-gold)] text-gold-foreground shadow-[var(--shadow-gold)] animate-glow-pulse transition-transform duration-500 group-hover:scale-110">
                   <s.icon className="h-6 w-6" />
                 </div>
                 <div className="mt-4 font-display text-3xl font-bold text-primary md:text-4xl">
