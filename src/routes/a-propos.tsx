@@ -145,10 +145,11 @@ function About() {
       <section className="relative isolate overflow-hidden">
         <img
           src={aboutHero}
-          alt="Équipe Teranga Bridge Africa à Dakar"
+          alt="Équipe de Teranga Bridge Africa réunie dans les bureaux de Dakar, avec terminal portuaire et silos agroalimentaires en arrière-plan"
           className="absolute inset-0 h-full w-full object-cover"
           width={1920}
           height={1080}
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-[image:var(--gradient-hero)]" />
         <div className="container relative mx-auto px-4 py-24 md:py-36">
