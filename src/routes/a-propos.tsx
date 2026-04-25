@@ -406,15 +406,17 @@ function About() {
                 t: "Livraison maîtrisée",
                 d: "Logistique optimisée et suivi de bout en bout jusqu'à votre site.",
               },
-            ].map((step) => (
+            ].map((step, i) => (
               <div
                 key={step.n}
-                className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-elegant)]"
+                className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 hover-lift reveal-on-scroll"
+                style={{ animationDelay: `${i * 0.1}s` }}
               >
-                <span className="font-display text-5xl font-bold text-primary/10 transition-colors group-hover:text-primary/20">
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-[image:var(--gradient-gold)] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
+                <span className="font-display text-5xl font-bold text-primary/10 transition-all duration-500 group-hover:text-primary/30 group-hover:scale-110 inline-block">
                   {step.n}
                 </span>
-                <div className="mt-2 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <div className="mt-2 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary transition-transform duration-500 group-hover:rotate-6 group-hover:bg-primary group-hover:text-primary-foreground">
                   <step.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 font-display text-lg font-semibold">{step.t}</h3>
