@@ -20,23 +20,117 @@ import {
   Compass,
 } from "lucide-react";
 
+const SITE_URL = "https://teranga-africa-connect.lovable.app";
+const ABOUT_URL = `${SITE_URL}/a-propos`;
+const OG_IMAGE = `${SITE_URL}${aboutHero}`;
+
+const PAGE_TITLE = "À propos de Teranga Bridge Africa — Approvisionnement industriel en Afrique";
+const PAGE_DESC =
+  "Découvrez Teranga Bridge Africa, entreprise basée à Dakar (Sénégal), spécialisée dans la fourniture de matières premières et d'équipements agroalimentaires pour les industries africaines. Notre histoire, notre mission, nos valeurs et nos engagements.";
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Teranga Bridge Africa",
+  alternateName: "TBA",
+  url: SITE_URL,
+  logo: `${SITE_URL}/favicon.ico`,
+  image: OG_IMAGE,
+  description:
+    "Entreprise sénégalaise spécialisée dans la fourniture de matières premières et d'équipements agroalimentaires pour les industries africaines.",
+  foundingLocation: "Dakar, Sénégal",
+  areaServed: [
+    { "@type": "Place", name: "Afrique" },
+    { "@type": "Country", name: "Sénégal" },
+    { "@type": "Country", name: "Mali" },
+    { "@type": "Country", name: "Côte d'Ivoire" },
+    { "@type": "Country", name: "Burkina Faso" },
+    { "@type": "Country", name: "Guinée" },
+  ],
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Dakar",
+    addressCountry: "SN",
+  },
+  sameAs: [],
+};
+
+const aboutPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  url: ABOUT_URL,
+  name: PAGE_TITLE,
+  description: PAGE_DESC,
+  primaryImageOfPage: OG_IMAGE,
+  inLanguage: "fr-FR",
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Teranga Bridge Africa",
+    url: SITE_URL,
+  },
+  about: { "@type": "Organization", name: "Teranga Bridge Africa" },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
+    { "@type": "ListItem", position: 2, name: "À propos", item: ABOUT_URL },
+  ],
+};
+
 export const Route = createFileRoute("/a-propos")({
   head: () => ({
     meta: [
-      { title: "À propos — Teranga Bridge Africa" },
+      { title: PAGE_TITLE },
+      { name: "description", content: PAGE_DESC },
       {
-        name: "description",
+        name: "keywords",
         content:
-          "Teranga Bridge Africa : entreprise sénégalaise spécialisée dans l'approvisionnement industriel et agroalimentaire en Afrique. Notre histoire, notre mission et nos valeurs.",
+          "Teranga Bridge Africa, TBA, approvisionnement industriel, agroalimentaire Afrique, matières premières Sénégal, équipements industriels, Dakar, import export Afrique",
       },
-      { property: "og:title", content: "À propos — Teranga Bridge Africa" },
+      { name: "author", content: "Teranga Bridge Africa" },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
+
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Teranga Bridge Africa" },
+      { property: "og:locale", content: "fr_FR" },
+      { property: "og:title", content: PAGE_TITLE },
+      { property: "og:description", content: PAGE_DESC },
+      { property: "og:url", content: ABOUT_URL },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:width", content: "1920" },
+      { property: "og:image:height", content: "1080" },
       {
-        property: "og:description",
+        property: "og:image:alt",
         content:
-          "Notre mission : un approvisionnement fiable, compétitif et durable pour les industries africaines.",
+          "Équipe de Teranga Bridge Africa réunie dans les bureaux de Dakar avec en arrière-plan un terminal portuaire et des silos agroalimentaires",
       },
-      { property: "og:image", content: aboutHero },
-      { name: "twitter:image", content: aboutHero },
+
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: PAGE_TITLE },
+      { name: "twitter:description", content: PAGE_DESC },
+      { name: "twitter:image", content: OG_IMAGE },
+      {
+        name: "twitter:image:alt",
+        content: "Équipe de Teranga Bridge Africa à Dakar",
+      },
+    ],
+    links: [{ rel: "canonical", href: ABOUT_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(organizationJsonLd),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(aboutPageJsonLd),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(breadcrumbJsonLd),
+      },
     ],
   }),
   component: About,
