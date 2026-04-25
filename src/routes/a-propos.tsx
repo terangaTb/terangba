@@ -149,14 +149,27 @@ function About() {
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <img
-          src={aboutHero}
-          alt="Équipe de Teranga Bridge Africa réunie dans les bureaux de Dakar, avec terminal portuaire et silos agroalimentaires en arrière-plan"
-          className="absolute inset-0 h-full w-full object-cover"
-          width={1920}
-          height={1080}
-          fetchPriority="high"
-        />
+        <picture>
+          <source
+            type="image/webp"
+            srcSet={`${aboutHero768Webp} 768w, ${aboutHero1280Webp} 1280w, ${aboutHero1920Webp} 1920w`}
+            sizes="100vw"
+          />
+          <source
+            type="image/jpeg"
+            srcSet={`${aboutHero768Jpg} 768w, ${aboutHero1280Jpg} 1280w, ${aboutHero1920Jpg} 1920w`}
+            sizes="100vw"
+          />
+          <img
+            src={aboutHero1280Jpg}
+            alt="Équipe de Teranga Bridge Africa réunie dans les bureaux de Dakar, avec terminal portuaire et silos agroalimentaires en arrière-plan"
+            className="absolute inset-0 h-full w-full object-cover"
+            width={1920}
+            height={1080}
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
         <div className="absolute inset-0 bg-[image:var(--gradient-hero)]" />
         <div className="container relative mx-auto px-4 py-24 md:py-36">
           <div className="max-w-2xl">
