@@ -163,7 +163,7 @@ function About() {
           <img
             src={aboutHero1280Jpg}
             alt="Équipe de Teranga Bridge Africa réunie dans les bureaux de Dakar, avec terminal portuaire et silos agroalimentaires en arrière-plan"
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover animate-ken-burns"
             width={1920}
             height={1080}
             fetchPriority="high"
@@ -171,24 +171,34 @@ function About() {
           />
         </picture>
         <div className="absolute inset-0 bg-[image:var(--gradient-hero)]" />
+        {/* Floating decorative blobs */}
+        <div
+          className="pointer-events-none absolute -left-24 top-1/3 h-72 w-72 rounded-full bg-gold/20 blur-3xl animate-blob"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-primary-glow/30 blur-3xl animate-blob"
+          style={{ animationDelay: "-5s" }}
+          aria-hidden="true"
+        />
         <div className="container relative mx-auto px-4 py-24 md:py-36">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-gold backdrop-blur">
+            <span className="inline-flex items-center rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-gold backdrop-blur animate-fade-in">
               À propos
             </span>
-            <h1 className="mt-6 font-display text-4xl font-bold leading-tight text-white md:text-6xl">
+            <h1 className="mt-6 font-display text-4xl font-bold leading-tight text-white md:text-6xl animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
               Bâtir des ponts industriels durables à travers l'Afrique
             </h1>
-            <p className="mt-6 max-w-xl text-lg text-white/85">
+            <p className="mt-6 max-w-xl text-lg text-white/85 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
               Depuis Dakar, nous connectons les industries africaines aux meilleures matières
               premières et équipements du monde — avec rigueur, transparence et engagement.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/80">
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/80 animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
               <span className="inline-flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-gold" /> Dakar, Sénégal
+                <MapPin className="h-4 w-4 text-gold animate-float-slow" /> Dakar, Sénégal
               </span>
               <span className="inline-flex items-center gap-2">
-                <Globe2 className="h-4 w-4 text-gold" /> Présence panafricaine
+                <Globe2 className="h-4 w-4 text-gold animate-spin-slow" /> Présence panafricaine
               </span>
               <span className="inline-flex items-center gap-2">
                 <Handshake className="h-4 w-4 text-gold" /> 50+ partenaires
@@ -261,16 +271,18 @@ function About() {
                 t: "Nos valeurs",
                 d: "Intégrité, qualité, innovation, proximité et engagement durable envers nos clients et partenaires.",
               },
-            ].map((c) => (
+            ].map((c, i) => (
               <div
                 key={c.t}
-                className="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-elegant)]"
+                className="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm hover-lift reveal-on-scroll"
+                style={{ animationDelay: `${i * 0.12}s` }}
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-elegant)]">
+                <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-[image:var(--gradient-primary)] opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-30" />
+                <div className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
                   <c.icon className="h-7 w-7" />
                 </div>
-                <h3 className="mt-6 font-display text-xl font-semibold">{c.t}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{c.d}</p>
+                <h3 className="relative mt-6 font-display text-xl font-semibold">{c.t}</h3>
+                <p className="relative mt-3 text-sm leading-relaxed text-muted-foreground">{c.d}</p>
               </div>
             ))}
           </div>
@@ -335,12 +347,13 @@ function About() {
               { v: "200+", l: "Clients industriels", icon: Users },
               { v: "50+", l: "Partenaires fiables", icon: Handshake },
               { v: "48h", l: "Délai moyen de devis", icon: TrendingUp },
-            ].map((s) => (
+            ].map((s, i) => (
               <div
                 key={s.l}
-                className="rounded-2xl border border-border bg-card p-6 text-center shadow-sm"
+                className="group rounded-2xl border border-border bg-card p-6 text-center shadow-sm hover-lift reveal-on-scroll"
+                style={{ animationDelay: `${i * 0.08}s` }}
               >
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[image:var(--gradient-gold)] text-gold-foreground shadow-[var(--shadow-gold)]">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[image:var(--gradient-gold)] text-gold-foreground shadow-[var(--shadow-gold)] animate-glow-pulse transition-transform duration-500 group-hover:scale-110">
                   <s.icon className="h-6 w-6" />
                 </div>
                 <div className="mt-4 font-display text-3xl font-bold text-primary md:text-4xl">
@@ -393,15 +406,17 @@ function About() {
                 t: "Livraison maîtrisée",
                 d: "Logistique optimisée et suivi de bout en bout jusqu'à votre site.",
               },
-            ].map((step) => (
+            ].map((step, i) => (
               <div
                 key={step.n}
-                className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-elegant)]"
+                className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 hover-lift reveal-on-scroll"
+                style={{ animationDelay: `${i * 0.1}s` }}
               >
-                <span className="font-display text-5xl font-bold text-primary/10 transition-colors group-hover:text-primary/20">
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-[image:var(--gradient-gold)] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
+                <span className="font-display text-5xl font-bold text-primary/10 transition-all duration-500 group-hover:text-primary/30 group-hover:scale-110 inline-block">
                   {step.n}
                 </span>
-                <div className="mt-2 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <div className="mt-2 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary transition-transform duration-500 group-hover:rotate-6 group-hover:bg-primary group-hover:text-primary-foreground">
                   <step.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 font-display text-lg font-semibold">{step.t}</h3>
@@ -445,13 +460,17 @@ function About() {
               ))}
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-2xl bg-[image:var(--gradient-primary)] p-10 text-primary-foreground shadow-[var(--shadow-elegant)]">
-            <Sparkles className="absolute right-6 top-6 h-10 w-10 text-gold/40" />
-            <p className="font-display text-2xl font-semibold leading-snug md:text-3xl">
+          <div className="relative overflow-hidden rounded-2xl bg-[image:var(--gradient-primary)] p-10 text-primary-foreground shadow-[var(--shadow-elegant)] hover-tilt">
+            <div
+              className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-gold/30 blur-3xl animate-blob"
+              aria-hidden="true"
+            />
+            <Sparkles className="absolute right-6 top-6 h-10 w-10 text-gold/60 animate-spin-slow" />
+            <p className="relative font-display text-2xl font-semibold leading-snug md:text-3xl">
               « Notre rôle est d'ouvrir des passerelles industrielles fiables pour accélérer la
               transformation économique africaine. »
             </p>
-            <div className="mt-6 border-t border-primary-foreground/20 pt-4 text-sm text-primary-foreground/85">
+            <div className="relative mt-6 border-t border-primary-foreground/20 pt-4 text-sm text-primary-foreground/85">
               — La Direction, Teranga Bridge Africa
             </div>
           </div>
@@ -460,23 +479,33 @@ function About() {
 
       {/* CTA */}
       <section className="container mx-auto px-4 pb-20">
-        <div className="relative overflow-hidden rounded-2xl bg-[image:var(--gradient-primary)] px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
-          <h2 className="font-display text-3xl font-bold text-primary-foreground md:text-4xl">
+        <div className="group relative overflow-hidden rounded-2xl bg-[image:linear-gradient(135deg,var(--primary),var(--primary-glow),var(--primary))] animate-gradient-x px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
+          <div
+            className="pointer-events-none absolute -left-16 top-0 h-64 w-64 rounded-full bg-gold/20 blur-3xl animate-blob"
+            aria-hidden="true"
+          />
+          <div
+            className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-primary-foreground/10 blur-3xl animate-blob"
+            style={{ animationDelay: "-7s" }}
+            aria-hidden="true"
+          />
+          <h2 className="relative font-display text-3xl font-bold text-primary-foreground md:text-4xl">
             Construisons ensemble la chaîne d'approvisionnement de demain
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-primary-foreground/85">
+          <p className="relative mx-auto mt-4 max-w-xl text-primary-foreground/85">
             Échangeons sur vos enjeux industriels et obtenez un devis personnalisé sous 48h.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <div className="relative mt-8 flex flex-wrap justify-center gap-4">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-gold)] px-6 py-3 font-semibold text-gold-foreground shadow-[var(--shadow-gold)]"
+              className="group/btn inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-gold)] px-6 py-3 font-semibold text-gold-foreground shadow-[var(--shadow-gold)] animate-glow-pulse transition-transform duration-300 hover:-translate-y-0.5 hover:scale-105"
             >
-              Nous contacter <ArrowRight className="h-4 w-4" />
+              Nous contacter
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
             </Link>
             <Link
               to="/services"
-              className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-6 py-3 font-semibold text-primary-foreground backdrop-blur transition-colors hover:bg-primary-foreground/20"
+              className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-6 py-3 font-semibold text-primary-foreground backdrop-blur transition-all duration-300 hover:scale-105 hover:bg-primary-foreground/20"
             >
               Découvrir nos services
             </Link>
