@@ -460,13 +460,17 @@ function About() {
               ))}
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-2xl bg-[image:var(--gradient-primary)] p-10 text-primary-foreground shadow-[var(--shadow-elegant)]">
-            <Sparkles className="absolute right-6 top-6 h-10 w-10 text-gold/40" />
-            <p className="font-display text-2xl font-semibold leading-snug md:text-3xl">
+          <div className="relative overflow-hidden rounded-2xl bg-[image:var(--gradient-primary)] p-10 text-primary-foreground shadow-[var(--shadow-elegant)] hover-tilt">
+            <div
+              className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-gold/30 blur-3xl animate-blob"
+              aria-hidden="true"
+            />
+            <Sparkles className="absolute right-6 top-6 h-10 w-10 text-gold/60 animate-spin-slow" />
+            <p className="relative font-display text-2xl font-semibold leading-snug md:text-3xl">
               « Notre rôle est d'ouvrir des passerelles industrielles fiables pour accélérer la
               transformation économique africaine. »
             </p>
-            <div className="mt-6 border-t border-primary-foreground/20 pt-4 text-sm text-primary-foreground/85">
+            <div className="relative mt-6 border-t border-primary-foreground/20 pt-4 text-sm text-primary-foreground/85">
               — La Direction, Teranga Bridge Africa
             </div>
           </div>
@@ -475,23 +479,33 @@ function About() {
 
       {/* CTA */}
       <section className="container mx-auto px-4 pb-20">
-        <div className="relative overflow-hidden rounded-2xl bg-[image:var(--gradient-primary)] px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
-          <h2 className="font-display text-3xl font-bold text-primary-foreground md:text-4xl">
+        <div className="group relative overflow-hidden rounded-2xl bg-[image:linear-gradient(135deg,var(--primary),var(--primary-glow),var(--primary))] animate-gradient-x px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
+          <div
+            className="pointer-events-none absolute -left-16 top-0 h-64 w-64 rounded-full bg-gold/20 blur-3xl animate-blob"
+            aria-hidden="true"
+          />
+          <div
+            className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-primary-foreground/10 blur-3xl animate-blob"
+            style={{ animationDelay: "-7s" }}
+            aria-hidden="true"
+          />
+          <h2 className="relative font-display text-3xl font-bold text-primary-foreground md:text-4xl">
             Construisons ensemble la chaîne d'approvisionnement de demain
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-primary-foreground/85">
+          <p className="relative mx-auto mt-4 max-w-xl text-primary-foreground/85">
             Échangeons sur vos enjeux industriels et obtenez un devis personnalisé sous 48h.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <div className="relative mt-8 flex flex-wrap justify-center gap-4">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-gold)] px-6 py-3 font-semibold text-gold-foreground shadow-[var(--shadow-gold)]"
+              className="group/btn inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-gold)] px-6 py-3 font-semibold text-gold-foreground shadow-[var(--shadow-gold)] animate-glow-pulse transition-transform duration-300 hover:-translate-y-0.5 hover:scale-105"
             >
-              Nous contacter <ArrowRight className="h-4 w-4" />
+              Nous contacter
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
             </Link>
             <Link
               to="/services"
-              className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-6 py-3 font-semibold text-primary-foreground backdrop-blur transition-colors hover:bg-primary-foreground/20"
+              className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-6 py-3 font-semibold text-primary-foreground backdrop-blur transition-all duration-300 hover:scale-105 hover:bg-primary-foreground/20"
             >
               Découvrir nos services
             </Link>
