@@ -271,16 +271,18 @@ function About() {
                 t: "Nos valeurs",
                 d: "Intégrité, qualité, innovation, proximité et engagement durable envers nos clients et partenaires.",
               },
-            ].map((c) => (
+            ].map((c, i) => (
               <div
                 key={c.t}
-                className="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-elegant)]"
+                className="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm hover-lift reveal-on-scroll"
+                style={{ animationDelay: `${i * 0.12}s` }}
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-elegant)]">
+                <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-[image:var(--gradient-primary)] opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-30" />
+                <div className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
                   <c.icon className="h-7 w-7" />
                 </div>
-                <h3 className="mt-6 font-display text-xl font-semibold">{c.t}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{c.d}</p>
+                <h3 className="relative mt-6 font-display text-xl font-semibold">{c.t}</h3>
+                <p className="relative mt-3 text-sm leading-relaxed text-muted-foreground">{c.d}</p>
               </div>
             ))}
           </div>
