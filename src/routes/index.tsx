@@ -94,6 +94,19 @@ function Home() {
                   controlsList="nodownload"
                 >
                   <source src="/tba.mp4" type="video/mp4" />
+                  <track
+                    kind="captions"
+                    src="/captions/tba.fr.vtt"
+                    srcLang="fr"
+                    label="Français"
+                    default
+                  />
+                  <track
+                    kind="captions"
+                    src="/captions/tba.en.vtt"
+                    srcLang="en"
+                    label="English"
+                  />
                   Votre navigateur ne prend pas en charge la lecture vidéo.
                 </video>
               </div>
