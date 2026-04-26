@@ -125,9 +125,11 @@
   0% { opacity: 0; transform: translateX(30px); }
   100% { opacity: 1; transform: translateX(0); }
 }
+/* GPU-friendly pulse: animates transform+opacity on a pseudo halo,
+   avoids box-shadow repaint cost (improves INP). */
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 oklch(0.78 0.14 85 / 0.5); }
-  50% { box-shadow: 0 0 0 14px oklch(0.78 0.14 85 / 0); }
+  0%, 100% { transform: scale(1); opacity: 0.55; }
+  50% { transform: scale(1.6); opacity: 0; }
 }
 @keyframes blob {
   0%, 100% { transform: translate(0, 0) scale(1); }
