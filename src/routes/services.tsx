@@ -1,4 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useRef, useEffect } from "react";
+import { z } from "zod";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
@@ -26,6 +31,9 @@ import {
   Leaf,
   CheckCircle2,
   PhoneCall,
+  Send,
+  FileText,
+  Building2,
 } from "lucide-react";
 
 const SITE_URL = "https://teranga-africa-connect.lovable.app";
@@ -224,10 +232,88 @@ export const Route = createFileRoute("/services")({
   component: Services,
 });
 
+const SERVICE_OPTIONS = services.map((s) => s.t);
+
+const quoteSchema = z.object({
+  name: z.string().trim().min(2, "Nom trop court").max(100),
+  email: z.string().trim().email("Email invalide").max(255),
+  company: z.string().trim().max(120).optional().or(z.literal("")),
+  service: z.string().trim().min(2, "Sélectionnez un service").max(160),
+  volume: z.string().trim().max(80).optional().or(z.literal("")),
+  message: z.string().trim().min(10, "Décrivez votre besoin (10 caractères min.)").max(1000),
+});
+
 function Services() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    company: "",
+    service: "Services",
+    volume: "",
+    message: "",
+  });
+  const [sending, setSending] = useState(false);
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  // Pré-remplissage via query string ?service=...
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const presetService = params.get("service");
+    if (presetService) {
+      setForm((f) => ({ ...f, service: presetService }));
+    }
+  }, []);
+
+  function preselectService(name: string) {
+    setForm((f) => ({ ...f, service: name }));
+    if (typeof document !== "undefined") {
+      document.getElementById("devis")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      // focus le premier champ après le scroll
+      setTimeout(() => formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus(), 450);
+    }
+  }
+
+  function submitQuote(e: React.FormEvent) {
+    e.preventDefault();
+    const r = quoteSchema.safeParse(form);
+    if (!r.success) {
+      toast.error(r.error.issues[0].message);
+      return;
+    }
+    setSending(true);
+    void (async () => {
+      const composedMessage =
+        `[Demande de devis — ${r.data.service}]\n` +
+        (r.data.company ? `Société : ${r.data.company}\n` : "") +
+        (r.data.volume ? `Volume / cadence estimés : ${r.data.volume}\n` : "") +
+        `\n${r.data.message}`;
+      const { error } = await supabase.from("contact_requests").insert({
+        name: r.data.name,
+        email: r.data.email,
+        message: composedMessage,
+      });
+      setSending(false);
+      if (error) {
+        toast.error("Une erreur est survenue. Réessayez.");
+        return;
+      }
+      toast.success("Votre demande de devis a bien été envoyée. Nous revenons vers vous sous 48h.");
+      setForm({
+        name: "",
+        email: "",
+        company: "",
+        service: r.data.service,
+        volume: "",
+        message: "",
+      });
+    })();
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <Toaster />
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
@@ -266,12 +352,13 @@ function Services() {
               unique pour sécuriser et accélérer votre activité industrielle en Afrique.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/contact"
+              <a
+                href="#devis"
+                onClick={() => setForm((f) => ({ ...f, service: "Services" }))}
                 className="inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-gold)] px-6 py-3 font-semibold text-gold-foreground shadow-[var(--shadow-gold)] transition-transform duration-300 hover:-translate-y-0.5 hover:scale-105"
               >
                 Demander un devis <ArrowRight className="h-4 w-4" />
-              </Link>
+              </a>
               <a
                 href="#nos-services"
                 className="inline-flex items-center gap-2 rounded-md border border-white/30 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
@@ -361,6 +448,13 @@ function Services() {
                     </li>
                   ))}
                 </ul>
+                <button
+                  type="button"
+                  onClick={() => preselectService(s.t)}
+                  className="relative mt-6 inline-flex items-center gap-2 self-start rounded-md border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                >
+                  Demander un devis <ArrowRight className="h-4 w-4" />
+                </button>
               </article>
             ))}
           </div>
@@ -435,6 +529,158 @@ function Services() {
         </div>
       </section>
 
+      {/* Formulaire de devis */}
+      <section id="devis" className="container mx-auto px-4 py-20 cv-auto scroll-mt-24">
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-5">
+            <span className="text-xs font-bold uppercase tracking-widest text-gold">
+              Demande de devis
+            </span>
+            <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
+              Recevez une proposition chiffrée sous 48&nbsp;heures
+            </h2>
+            <p className="mt-5 text-muted-foreground">
+              Décrivez votre besoin en quelques lignes. Notre équipe revient vers vous avec une
+              recommandation précise, des références fournisseurs et une estimation budgétaire.
+            </p>
+            <ul className="mt-8 space-y-4 text-sm">
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                <span><strong className="text-foreground">Réponse sous 48h</strong> ouvrées par un interlocuteur dédié.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                <span><strong className="text-foreground">Confidentialité</strong> totale de vos informations et volumes.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                <span><strong className="text-foreground">Sans engagement</strong> — étude et estimation offertes.</span>
+              </li>
+            </ul>
+            <div className="mt-8 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">
+              Préférez un échange direct ?{" "}
+              <Link to="/contact" className="font-semibold text-primary hover:underline">
+                Voir nos coordonnées
+              </Link>
+              .
+            </div>
+          </div>
+
+          <form
+            ref={formRef}
+            onSubmit={submitQuote}
+            className="lg:col-span-7 rounded-2xl border border-border bg-card p-6 shadow-sm md:p-8"
+            noValidate
+          >
+            <h3 className="flex items-center gap-2 font-display text-lg font-semibold">
+              <FileText className="h-5 w-5 text-primary" /> Votre demande
+            </h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Tous les champs marqués d'un * sont obligatoires.
+            </p>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <div>
+                <label htmlFor="q-name" className="mb-1 block text-sm font-medium">Nom complet *</label>
+                <input
+                  id="q-name"
+                  name="name"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  maxLength={100}
+                  required
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                />
+              </div>
+              <div>
+                <label htmlFor="q-email" className="mb-1 block text-sm font-medium">Email professionnel *</label>
+                <input
+                  id="q-email"
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  maxLength={255}
+                  required
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                />
+              </div>
+              <div>
+                <label htmlFor="q-company" className="mb-1 block text-sm font-medium">
+                  <span className="inline-flex items-center gap-1.5"><Building2 className="h-4 w-4 text-gold" /> Société</span>
+                </label>
+                <input
+                  id="q-company"
+                  name="company"
+                  value={form.company}
+                  onChange={(e) => setForm({ ...form, company: e.target.value })}
+                  maxLength={120}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                />
+              </div>
+              <div>
+                <label htmlFor="q-volume" className="mb-1 block text-sm font-medium">Volume / cadence estimés</label>
+                <input
+                  id="q-volume"
+                  name="volume"
+                  value={form.volume}
+                  onChange={(e) => setForm({ ...form, volume: e.target.value })}
+                  maxLength={80}
+                  placeholder="ex. 200 t / mois"
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label htmlFor="q-service" className="mb-1 block text-sm font-medium">Service concerné *</label>
+                <select
+                  id="q-service"
+                  name="service"
+                  value={form.service}
+                  onChange={(e) => setForm({ ...form, service: e.target.value })}
+                  required
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                >
+                  <option value="Services">Services (général)</option>
+                  {SERVICE_OPTIONS.map((opt) => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                  <option value="Autre">Autre / je ne sais pas encore</option>
+                </select>
+              </div>
+              <div className="md:col-span-2">
+                <label htmlFor="q-message" className="mb-1 block text-sm font-medium">Décrivez votre besoin *</label>
+                <textarea
+                  id="q-message"
+                  name="message"
+                  rows={5}
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  maxLength={1000}
+                  required
+                  placeholder="Spécifications, contraintes, calendrier souhaité…"
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                />
+                <div className="mt-1 text-right text-xs text-muted-foreground">
+                  {form.message.length}/1000
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={sending}
+              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[image:var(--gradient-primary)] px-6 py-3 font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <Send className="h-4 w-4" />
+              {sending ? "Envoi en cours…" : "Envoyer ma demande de devis"}
+            </button>
+            <p className="mt-3 text-center text-xs text-muted-foreground">
+              En soumettant ce formulaire, vous acceptez d'être recontacté par notre équipe.
+            </p>
+          </form>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="container mx-auto px-4 py-20 cv-auto">
         <div className="group relative overflow-hidden rounded-2xl bg-[image:linear-gradient(135deg,var(--primary),var(--primary-glow))] px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
@@ -455,14 +701,14 @@ function Services() {
             48 heures.
           </p>
           <div className="relative mt-8 flex flex-wrap justify-center gap-4">
-            <Link
-              to="/contact"
+            <a
+              href="#devis"
               className="group/btn inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-gold)] px-6 py-3 font-semibold text-gold-foreground shadow-[var(--shadow-gold)] animate-glow-pulse transition-transform duration-300 hover:-translate-y-0.5 hover:scale-105"
             >
               <PhoneCall className="h-4 w-4" />
               Demander un devis
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
-            </Link>
+            </a>
             <Link
               to="/a-propos"
               className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-6 py-3 font-semibold text-primary-foreground backdrop-blur transition-all duration-300 hover:scale-105 hover:bg-primary-foreground/20"
