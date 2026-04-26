@@ -163,7 +163,7 @@ function About() {
           <img
             src={aboutHero1280Jpg}
             alt="Équipe de Teranga Bridge Africa réunie dans les bureaux de Dakar, avec terminal portuaire et silos agroalimentaires en arrière-plan"
-            className="absolute inset-0 h-full w-full object-cover animate-ken-burns"
+            className="absolute inset-0 h-full w-full object-cover"
             width={1920}
             height={1080}
             fetchPriority="high"
@@ -171,34 +171,24 @@ function About() {
           />
         </picture>
         <div className="absolute inset-0 bg-[image:var(--gradient-hero)]" />
-        {/* Floating decorative blobs */}
-        <div
-          className="pointer-events-none absolute -left-24 top-1/3 h-72 w-72 rounded-full bg-gold/20 blur-3xl animate-blob"
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-primary-glow/30 blur-3xl animate-blob"
-          style={{ animationDelay: "-5s" }}
-          aria-hidden="true"
-        />
         <div className="container relative mx-auto px-4 py-24 md:py-36">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-gold backdrop-blur animate-fade-in">
+            <span className="inline-flex items-center rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-gold backdrop-blur">
               À propos
             </span>
-            <h1 className="mt-6 font-display text-4xl font-bold leading-tight text-white md:text-6xl animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+            <h1 className="mt-6 font-display text-4xl font-bold leading-tight text-white md:text-6xl">
               Bâtir des ponts industriels durables à travers l'Afrique
             </h1>
-            <p className="mt-6 max-w-xl text-lg text-white/85 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+            <p className="mt-6 max-w-xl text-lg text-white/85">
               Depuis Dakar, nous connectons les industries africaines aux meilleures matières
               premières et équipements du monde — avec rigueur, transparence et engagement.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/80 animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/80">
               <span className="inline-flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-gold animate-float-slow" /> Dakar, Sénégal
+                <MapPin className="h-4 w-4 text-gold" /> Dakar, Sénégal
               </span>
               <span className="inline-flex items-center gap-2">
-                <Globe2 className="h-4 w-4 text-gold animate-spin-slow" /> Présence panafricaine
+                <Globe2 className="h-4 w-4 text-gold" /> Présence panafricaine
               </span>
               <span className="inline-flex items-center gap-2">
                 <Handshake className="h-4 w-4 text-gold" /> 50+ partenaires
@@ -209,7 +199,7 @@ function About() {
       </section>
 
       {/* Notre histoire */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-4 py-20 cv-auto">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-5">
             <span className="text-xs font-bold uppercase tracking-widest text-gold">
@@ -241,7 +231,7 @@ function About() {
       </section>
 
       {/* Mission / Vision / Valeurs */}
-      <section className="bg-secondary/30 py-20">
+      <section className="bg-secondary/30 py-20 cv-auto">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-xs font-bold uppercase tracking-widest text-gold">
@@ -290,7 +280,7 @@ function About() {
       </section>
 
       {/* Nos engagements */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-4 py-20 cv-auto">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-gold">
@@ -367,7 +357,7 @@ function About() {
       </section>
 
       {/* Notre approche / processus */}
-      <section className="bg-secondary/30 py-20">
+      <section className="bg-secondary/30 py-20 cv-auto">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-xs font-bold uppercase tracking-widest text-gold">
@@ -428,7 +418,7 @@ function About() {
       </section>
 
       {/* Ancrage local */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-4 py-20 cv-auto">
         <div className="grid gap-10 rounded-3xl border border-border bg-card p-8 shadow-sm md:p-12 lg:grid-cols-2 lg:items-center">
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-gold">
@@ -478,8 +468,8 @@ function About() {
       </section>
 
       {/* CTA */}
-      <section className="container mx-auto px-4 pb-20">
-        <div className="group relative overflow-hidden rounded-2xl bg-[image:linear-gradient(135deg,var(--primary),var(--primary-glow),var(--primary))] animate-gradient-x px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
+      <section className="container mx-auto px-4 pb-20 cv-auto">
+        <div className="group relative overflow-hidden rounded-2xl bg-[image:linear-gradient(135deg,var(--primary),var(--primary-glow))] px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
           <div
             className="pointer-events-none absolute -left-16 top-0 h-64 w-64 rounded-full bg-gold/20 blur-3xl animate-blob"
             aria-hidden="true"
