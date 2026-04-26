@@ -159,7 +159,19 @@
 .animate-scale-in { animation: scale-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .animate-slide-in-left { animation: slide-in-left 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .animate-slide-in-right { animation: slide-in-right 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.animate-glow-pulse { animation: glow-pulse 2.5s ease-out infinite; }
+.animate-glow-pulse {
+  position: relative;
+}
+.animate-glow-pulse::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: oklch(0.78 0.14 85 / 0.5);
+  z-index: -1;
+  animation: glow-pulse 2.5s ease-out infinite;
+  will-change: transform, opacity;
+}
 .animate-blob { animation: blob 14s ease-in-out infinite; }
 .animate-ken-burns { animation: ken-burns 18s ease-out forwards; }
 .animate-gradient-x {
