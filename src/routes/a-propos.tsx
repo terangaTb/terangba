@@ -199,7 +199,7 @@ function About() {
       </section>
 
       {/* Notre histoire */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-4 py-20 cv-auto">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-5">
             <span className="text-xs font-bold uppercase tracking-widest text-gold">
@@ -231,7 +231,7 @@ function About() {
       </section>
 
       {/* Mission / Vision / Valeurs */}
-      <section className="bg-secondary/30 py-20">
+      <section className="bg-secondary/30 py-20 cv-auto">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-xs font-bold uppercase tracking-widest text-gold">
@@ -280,7 +280,7 @@ function About() {
       </section>
 
       {/* Nos engagements */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-4 py-20 cv-auto">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-gold">
@@ -357,7 +357,7 @@ function About() {
       </section>
 
       {/* Notre approche / processus */}
-      <section className="bg-secondary/30 py-20">
+      <section className="bg-secondary/30 py-20 cv-auto">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-xs font-bold uppercase tracking-widest text-gold">
@@ -418,7 +418,7 @@ function About() {
       </section>
 
       {/* Ancrage local */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-4 py-20 cv-auto">
         <div className="grid gap-10 rounded-3xl border border-border bg-card p-8 shadow-sm md:p-12 lg:grid-cols-2 lg:items-center">
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-gold">
@@ -468,7 +468,7 @@ function About() {
       </section>
 
       {/* CTA */}
-      <section className="container mx-auto px-4 pb-20">
+      <section className="container mx-auto px-4 pb-20 cv-auto">
         <div className="group relative overflow-hidden rounded-2xl bg-[image:linear-gradient(135deg,var(--primary),var(--primary-glow),var(--primary))] animate-gradient-x px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
           <div
             className="pointer-events-none absolute -left-16 top-0 h-64 w-64 rounded-full bg-gold/20 blur-3xl animate-blob"
