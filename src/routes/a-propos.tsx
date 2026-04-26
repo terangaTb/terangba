@@ -469,7 +469,7 @@ function About() {
 
       {/* CTA */}
       <section className="container mx-auto px-4 pb-20 cv-auto">
-        <div className="group relative overflow-hidden rounded-2xl bg-[image:linear-gradient(135deg,var(--primary),var(--primary-glow),var(--primary))] animate-gradient-x px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
+        <div className="group relative overflow-hidden rounded-2xl bg-[image:linear-gradient(135deg,var(--primary),var(--primary-glow))] px-8 py-14 text-center shadow-[var(--shadow-elegant)] md:px-16">
           <div
             className="pointer-events-none absolute -left-16 top-0 h-64 w-64 rounded-full bg-gold/20 blur-3xl animate-blob"
             aria-hidden="true"
