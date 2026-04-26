@@ -232,10 +232,88 @@ export const Route = createFileRoute("/services")({
   component: Services,
 });
 
+const SERVICE_OPTIONS = services.map((s) => s.t);
+
+const quoteSchema = z.object({
+  name: z.string().trim().min(2, "Nom trop court").max(100),
+  email: z.string().trim().email("Email invalide").max(255),
+  company: z.string().trim().max(120).optional().or(z.literal("")),
+  service: z.string().trim().min(2, "Sélectionnez un service").max(160),
+  volume: z.string().trim().max(80).optional().or(z.literal("")),
+  message: z.string().trim().min(10, "Décrivez votre besoin (10 caractères min.)").max(1000),
+});
+
 function Services() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    company: "",
+    service: "Services",
+    volume: "",
+    message: "",
+  });
+  const [sending, setSending] = useState(false);
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  // Pré-remplissage via query string ?service=...
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const presetService = params.get("service");
+    if (presetService) {
+      setForm((f) => ({ ...f, service: presetService }));
+    }
+  }, []);
+
+  function preselectService(name: string) {
+    setForm((f) => ({ ...f, service: name }));
+    if (typeof document !== "undefined") {
+      document.getElementById("devis")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      // focus le premier champ après le scroll
+      setTimeout(() => formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus(), 450);
+    }
+  }
+
+  function submitQuote(e: React.FormEvent) {
+    e.preventDefault();
+    const r = quoteSchema.safeParse(form);
+    if (!r.success) {
+      toast.error(r.error.issues[0].message);
+      return;
+    }
+    setSending(true);
+    void (async () => {
+      const composedMessage =
+        `[Demande de devis — ${r.data.service}]\n` +
+        (r.data.company ? `Société : ${r.data.company}\n` : "") +
+        (r.data.volume ? `Volume / cadence estimés : ${r.data.volume}\n` : "") +
+        `\n${r.data.message}`;
+      const { error } = await supabase.from("contact_requests").insert({
+        name: r.data.name,
+        email: r.data.email,
+        message: composedMessage,
+      });
+      setSending(false);
+      if (error) {
+        toast.error("Une erreur est survenue. Réessayez.");
+        return;
+      }
+      toast.success("Votre demande de devis a bien été envoyée. Nous revenons vers vous sous 48h.");
+      setForm({
+        name: "",
+        email: "",
+        company: "",
+        service: r.data.service,
+        volume: "",
+        message: "",
+      });
+    })();
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <Toaster />
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
