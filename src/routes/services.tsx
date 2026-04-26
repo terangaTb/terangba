@@ -448,6 +448,13 @@ function Services() {
                     </li>
                   ))}
                 </ul>
+                <button
+                  type="button"
+                  onClick={() => preselectService(s.t)}
+                  className="relative mt-6 inline-flex items-center gap-2 self-start rounded-md border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                >
+                  Demander un devis <ArrowRight className="h-4 w-4" />
+                </button>
               </article>
             ))}
           </div>
