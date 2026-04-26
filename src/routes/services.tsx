@@ -1,4 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useRef, useEffect } from "react";
+import { z } from "zod";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
@@ -26,6 +31,9 @@ import {
   Leaf,
   CheckCircle2,
   PhoneCall,
+  Send,
+  FileText,
+  Building2,
 } from "lucide-react";
 
 const SITE_URL = "https://teranga-africa-connect.lovable.app";
