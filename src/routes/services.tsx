@@ -352,12 +352,13 @@ function Services() {
               unique pour sécuriser et accélérer votre activité industrielle en Afrique.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/contact"
+              <a
+                href="#devis"
+                onClick={() => setForm((f) => ({ ...f, service: "Services" }))}
                 className="inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-gold)] px-6 py-3 font-semibold text-gold-foreground shadow-[var(--shadow-gold)] transition-transform duration-300 hover:-translate-y-0.5 hover:scale-105"
               >
                 Demander un devis <ArrowRight className="h-4 w-4" />
-              </Link>
+              </a>
               <a
                 href="#nos-services"
                 className="inline-flex items-center gap-2 rounded-md border border-white/30 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
