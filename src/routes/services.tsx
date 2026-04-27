@@ -883,9 +883,40 @@ function Services() {
                   </div>
                 </div>
 
+                <label
+                  htmlFor="q-charter"
+                  className="mt-6 flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-secondary/40 p-4 transition-colors hover:border-primary/40 hover:bg-secondary/60"
+                >
+                  <input
+                    id="q-charter"
+                    name="charterAccepted"
+                    type="checkbox"
+                    checked={form.charterAccepted}
+                    onChange={(e) => setForm({ ...form, charterAccepted: e.target.checked })}
+                    required
+                    aria-describedby="q-charter-desc"
+                    className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[oklch(0.42_0.11_155)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                  />
+                  <span className="text-sm leading-relaxed text-foreground/90">
+                    Je confirme avoir lu et accepté la{" "}
+                    <Link
+                      to="/engagements"
+                      hash="charte"
+                      className="font-semibold text-primary underline-offset-2 hover:underline"
+                    >
+                      charte éthique / NDA
+                    </Link>{" "}
+                    de Teranga Bridge Africa. <span className="text-destructive">*</span>
+                    <span id="q-charter-desc" className="mt-1 block text-xs text-muted-foreground">
+                      Confidentialité de vos informations, anti-corruption et engagements
+                      réciproques.
+                    </span>
+                  </span>
+                </label>
+
                 <button
                   type="submit"
-                  disabled={sending}
+                  disabled={sending || !form.charterAccepted}
                   className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[image:var(--gradient-primary)] px-6 py-3 font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <Send className="h-4 w-4" />
