@@ -388,7 +388,8 @@ function Engagements() {
       </section>
 
       {/* Charte éthique */}
-      <section className="container mx-auto px-4 py-20 cv-auto">
+      <section id="charte" className="container mx-auto px-4 py-20 cv-auto scroll-mt-24">
+
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <span className="text-xs font-bold uppercase tracking-widest text-gold">
