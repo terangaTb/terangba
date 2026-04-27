@@ -34,6 +34,12 @@ import {
   Send,
   FileText,
   Building2,
+  Copy,
+  Printer,
+  Hash,
+  CalendarClock,
+  Mail,
+  User as UserIcon,
 } from "lucide-react";
 
 const SITE_URL = "https://teranga-africa-connect.lovable.app";
@@ -243,6 +249,36 @@ const quoteSchema = z.object({
   message: z.string().trim().min(10, "Décrivez votre besoin (10 caractères min.)").max(1000),
 });
 
+type Confirmation = {
+  reference: string;
+  submittedAt: string; // ISO
+  name: string;
+  email: string;
+  company: string;
+  service: string;
+  volume: string;
+  message: string;
+};
+
+function generateReference(): string {
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const dd = String(now.getDate()).padStart(2, "0");
+  // 5 chars alphanum aléatoires (sans I/O/0/1 pour lisibilité)
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let suffix = "";
+  const cryptoObj = typeof window !== "undefined" ? window.crypto : undefined;
+  if (cryptoObj?.getRandomValues) {
+    const buf = new Uint32Array(5);
+    cryptoObj.getRandomValues(buf);
+    for (let i = 0; i < 5; i++) suffix += alphabet[buf[i] % alphabet.length];
+  } else {
+    for (let i = 0; i < 5; i++) suffix += alphabet[Math.floor(Math.random() * alphabet.length)];
+  }
+  return `TBA-${yyyy}${mm}${dd}-${suffix}`;
+}
+
 function Services() {
   const [form, setForm] = useState({
     name: "",
@@ -253,7 +289,9 @@ function Services() {
     message: "",
   });
   const [sending, setSending] = useState(false);
+  const [confirmation, setConfirmation] = useState<Confirmation | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
+  const confirmRef = useRef<HTMLDivElement | null>(null);
 
   // Pré-remplissage via query string ?service=...
   useEffect(() => {
@@ -267,10 +305,33 @@ function Services() {
 
   function preselectService(name: string) {
     setForm((f) => ({ ...f, service: name }));
+    setConfirmation(null);
     if (typeof document !== "undefined") {
       document.getElementById("devis")?.scrollIntoView({ behavior: "smooth", block: "start" });
       // focus le premier champ après le scroll
       setTimeout(() => formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus(), 450);
+    }
+  }
+
+  function resetForNewRequest() {
+    setConfirmation(null);
+    setForm({
+      name: "",
+      email: "",
+      company: "",
+      service: "Services",
+      volume: "",
+      message: "",
+    });
+    setTimeout(() => formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus(), 100);
+  }
+
+  async function copyReference(ref: string) {
+    try {
+      await navigator.clipboard.writeText(ref);
+      toast.success("Numéro de référence copié");
+    } catch {
+      toast.error("Impossible de copier — sélectionnez le numéro manuellement");
     }
   }
 
@@ -283,8 +344,12 @@ function Services() {
     }
     setSending(true);
     void (async () => {
+      const reference = generateReference();
+      const submittedAt = new Date().toISOString();
       const composedMessage =
         `[Demande de devis — ${r.data.service}]\n` +
+        `Référence : ${reference}\n` +
+        `Date : ${submittedAt}\n` +
         (r.data.company ? `Société : ${r.data.company}\n` : "") +
         (r.data.volume ? `Volume / cadence estimés : ${r.data.volume}\n` : "") +
         `\n${r.data.message}`;
@@ -298,15 +363,21 @@ function Services() {
         toast.error("Une erreur est survenue. Réessayez.");
         return;
       }
-      toast.success("Votre demande de devis a bien été envoyée. Nous revenons vers vous sous 48h.");
-      setForm({
-        name: "",
-        email: "",
-        company: "",
+      toast.success(`Demande envoyée — référence ${reference}`);
+      setConfirmation({
+        reference,
+        submittedAt,
+        name: r.data.name,
+        email: r.data.email,
+        company: r.data.company ?? "",
         service: r.data.service,
-        volume: "",
-        message: "",
+        volume: r.data.volume ?? "",
+        message: r.data.message,
       });
+      // scroll vers la confirmation
+      setTimeout(() => {
+        confirmRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 50);
     })();
   }
 
@@ -566,118 +637,260 @@ function Services() {
             </div>
           </div>
 
-          <form
-            ref={formRef}
-            onSubmit={submitQuote}
-            className="lg:col-span-7 rounded-2xl border border-border bg-card p-6 shadow-sm md:p-8"
-            noValidate
-          >
-            <h3 className="flex items-center gap-2 font-display text-lg font-semibold">
-              <FileText className="h-5 w-5 text-primary" /> Votre demande
-            </h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Tous les champs marqués d'un * sont obligatoires.
-            </p>
+          <div className="lg:col-span-7">
+            {confirmation ? (
+              <div
+                ref={confirmRef}
+                role="status"
+                aria-live="polite"
+                className="rounded-2xl border border-primary/30 bg-card p-6 shadow-[var(--shadow-elegant)] md:p-8 print:border-black print:shadow-none"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-elegant)]">
+                    <CheckCircle2 className="h-6 w-6" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-display text-xl font-semibold">
+                      Demande envoyée avec succès
+                    </h3>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Merci {confirmation.name.split(" ")[0]} ! Notre équipe revient vers vous sous{" "}
+                      <strong className="text-foreground">48&nbsp;heures ouvrées</strong> à
+                      l'adresse <strong className="text-foreground">{confirmation.email}</strong>.
+                    </p>
+                  </div>
+                </div>
 
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <div>
-                <label htmlFor="q-name" className="mb-1 block text-sm font-medium">Nom complet *</label>
-                <input
-                  id="q-name"
-                  name="name"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  maxLength={100}
-                  required
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
-                />
-              </div>
-              <div>
-                <label htmlFor="q-email" className="mb-1 block text-sm font-medium">Email professionnel *</label>
-                <input
-                  id="q-email"
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  maxLength={255}
-                  required
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
-                />
-              </div>
-              <div>
-                <label htmlFor="q-company" className="mb-1 block text-sm font-medium">
-                  <span className="inline-flex items-center gap-1.5"><Building2 className="h-4 w-4 text-gold" /> Société</span>
-                </label>
-                <input
-                  id="q-company"
-                  name="company"
-                  value={form.company}
-                  onChange={(e) => setForm({ ...form, company: e.target.value })}
-                  maxLength={120}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
-                />
-              </div>
-              <div>
-                <label htmlFor="q-volume" className="mb-1 block text-sm font-medium">Volume / cadence estimés</label>
-                <input
-                  id="q-volume"
-                  name="volume"
-                  value={form.volume}
-                  onChange={(e) => setForm({ ...form, volume: e.target.value })}
-                  maxLength={80}
-                  placeholder="ex. 200 t / mois"
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label htmlFor="q-service" className="mb-1 block text-sm font-medium">Service concerné *</label>
-                <select
-                  id="q-service"
-                  name="service"
-                  value={form.service}
-                  onChange={(e) => setForm({ ...form, service: e.target.value })}
-                  required
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
-                >
-                  <option value="Services">Services (général)</option>
-                  {SERVICE_OPTIONS.map((opt) => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
-                  <option value="Autre">Autre / je ne sais pas encore</option>
-                </select>
-              </div>
-              <div className="md:col-span-2">
-                <label htmlFor="q-message" className="mb-1 block text-sm font-medium">Décrivez votre besoin *</label>
-                <textarea
-                  id="q-message"
-                  name="message"
-                  rows={5}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  maxLength={1000}
-                  required
-                  placeholder="Spécifications, contraintes, calendrier souhaité…"
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
-                />
-                <div className="mt-1 text-right text-xs text-muted-foreground">
-                  {form.message.length}/1000
+                {/* Bloc référence */}
+                <div className="mt-6 rounded-xl border border-gold/30 bg-gold/5 p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-gold">
+                        <Hash className="h-3.5 w-3.5" /> Numéro de référence
+                      </p>
+                      <p
+                        className="mt-1 select-all break-all font-mono text-xl font-semibold text-foreground md:text-2xl"
+                        aria-label="Numéro de référence du dossier"
+                      >
+                        {confirmation.reference}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2 print:hidden">
+                      <button
+                        type="button"
+                        onClick={() => copyReference(confirmation.reference)}
+                        className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <Copy className="h-4 w-4" /> Copier
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => typeof window !== "undefined" && window.print()}
+                        className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <Printer className="h-4 w-4" /> Imprimer
+                      </button>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Conservez ce numéro pour toute correspondance — il nous permettra de retrouver
+                    votre dossier instantanément.
+                  </p>
+                </div>
+
+                {/* Récapitulatif */}
+                <div className="mt-6">
+                  <h4 className="font-display text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                    Récapitulatif de votre demande
+                  </h4>
+                  <dl className="mt-3 divide-y divide-border rounded-xl border border-border bg-background/50">
+                    <div className="grid grid-cols-1 gap-1 px-4 py-3 sm:grid-cols-3">
+                      <dt className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        <CalendarClock className="h-3.5 w-3.5" /> Soumise le
+                      </dt>
+                      <dd className="sm:col-span-2 text-sm">
+                        {new Date(confirmation.submittedAt).toLocaleString("fr-FR", {
+                          dateStyle: "long",
+                          timeStyle: "short",
+                        })}
+                      </dd>
+                    </div>
+                    <div className="grid grid-cols-1 gap-1 px-4 py-3 sm:grid-cols-3">
+                      <dt className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        <UserIcon className="h-3.5 w-3.5" /> Contact
+                      </dt>
+                      <dd className="sm:col-span-2 text-sm">{confirmation.name}</dd>
+                    </div>
+                    <div className="grid grid-cols-1 gap-1 px-4 py-3 sm:grid-cols-3">
+                      <dt className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        <Mail className="h-3.5 w-3.5" /> Email
+                      </dt>
+                      <dd className="sm:col-span-2 text-sm break-all">{confirmation.email}</dd>
+                    </div>
+                    {confirmation.company && (
+                      <div className="grid grid-cols-1 gap-1 px-4 py-3 sm:grid-cols-3">
+                        <dt className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                          <Building2 className="h-3.5 w-3.5" /> Société
+                        </dt>
+                        <dd className="sm:col-span-2 text-sm">{confirmation.company}</dd>
+                      </div>
+                    )}
+                    <div className="grid grid-cols-1 gap-1 px-4 py-3 sm:grid-cols-3">
+                      <dt className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        <FileText className="h-3.5 w-3.5" /> Service
+                      </dt>
+                      <dd className="sm:col-span-2 text-sm">{confirmation.service}</dd>
+                    </div>
+                    {confirmation.volume && (
+                      <div className="grid grid-cols-1 gap-1 px-4 py-3 sm:grid-cols-3">
+                        <dt className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                          Volume / cadence
+                        </dt>
+                        <dd className="sm:col-span-2 text-sm">{confirmation.volume}</dd>
+                      </div>
+                    )}
+                    <div className="px-4 py-3">
+                      <dt className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        Message
+                      </dt>
+                      <dd className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
+                        {confirmation.message}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <div className="mt-6 flex flex-wrap gap-3 print:hidden">
+                  <button
+                    type="button"
+                    onClick={resetForNewRequest}
+                    className="inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-primary)] px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform hover:-translate-y-0.5"
+                  >
+                    Nouvelle demande
+                  </button>
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-5 py-2.5 text-sm font-semibold shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+                  >
+                    Nous contacter
+                  </Link>
                 </div>
               </div>
-            </div>
+            ) : (
+              <form
+                ref={formRef}
+                onSubmit={submitQuote}
+                className="rounded-2xl border border-border bg-card p-6 shadow-sm md:p-8"
+                noValidate
+              >
+                <h3 className="flex items-center gap-2 font-display text-lg font-semibold">
+                  <FileText className="h-5 w-5 text-primary" /> Votre demande
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Tous les champs marqués d'un * sont obligatoires.
+                </p>
 
-            <button
-              type="submit"
-              disabled={sending}
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[image:var(--gradient-primary)] px-6 py-3 font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              <Send className="h-4 w-4" />
-              {sending ? "Envoi en cours…" : "Envoyer ma demande de devis"}
-            </button>
-            <p className="mt-3 text-center text-xs text-muted-foreground">
-              En soumettant ce formulaire, vous acceptez d'être recontacté par notre équipe.
-            </p>
-          </form>
+                <div className="mt-6 grid gap-4 md:grid-cols-2">
+                  <div>
+                    <label htmlFor="q-name" className="mb-1 block text-sm font-medium">Nom complet *</label>
+                    <input
+                      id="q-name"
+                      name="name"
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      maxLength={100}
+                      required
+                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="q-email" className="mb-1 block text-sm font-medium">Email professionnel *</label>
+                    <input
+                      id="q-email"
+                      name="email"
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      maxLength={255}
+                      required
+                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="q-company" className="mb-1 block text-sm font-medium">
+                      <span className="inline-flex items-center gap-1.5"><Building2 className="h-4 w-4 text-gold" /> Société</span>
+                    </label>
+                    <input
+                      id="q-company"
+                      name="company"
+                      value={form.company}
+                      onChange={(e) => setForm({ ...form, company: e.target.value })}
+                      maxLength={120}
+                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="q-volume" className="mb-1 block text-sm font-medium">Volume / cadence estimés</label>
+                    <input
+                      id="q-volume"
+                      name="volume"
+                      value={form.volume}
+                      onChange={(e) => setForm({ ...form, volume: e.target.value })}
+                      maxLength={80}
+                      placeholder="ex. 200 t / mois"
+                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label htmlFor="q-service" className="mb-1 block text-sm font-medium">Service concerné *</label>
+                    <select
+                      id="q-service"
+                      name="service"
+                      value={form.service}
+                      onChange={(e) => setForm({ ...form, service: e.target.value })}
+                      required
+                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                    >
+                      <option value="Services">Services (général)</option>
+                      {SERVICE_OPTIONS.map((opt) => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                      <option value="Autre">Autre / je ne sais pas encore</option>
+                    </select>
+                  </div>
+                  <div className="md:col-span-2">
+                    <label htmlFor="q-message" className="mb-1 block text-sm font-medium">Décrivez votre besoin *</label>
+                    <textarea
+                      id="q-message"
+                      name="message"
+                      rows={5}
+                      value={form.message}
+                      onChange={(e) => setForm({ ...form, message: e.target.value })}
+                      maxLength={1000}
+                      required
+                      placeholder="Spécifications, contraintes, calendrier souhaité…"
+                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+                    />
+                    <div className="mt-1 text-right text-xs text-muted-foreground">
+                      {form.message.length}/1000
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={sending}
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[image:var(--gradient-primary)] px-6 py-3 font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <Send className="h-4 w-4" />
+                  {sending ? "Envoi en cours…" : "Envoyer ma demande de devis"}
+                </button>
+                <p className="mt-3 text-center text-xs text-muted-foreground">
+                  En soumettant ce formulaire, vous acceptez d'être recontacté par notre équipe.
+                </p>
+              </form>
+            )}
+          </div>
         </div>
       </section>
 
