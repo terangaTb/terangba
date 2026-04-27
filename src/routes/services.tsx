@@ -247,6 +247,9 @@ const quoteSchema = z.object({
   service: z.string().trim().min(2, "Sélectionnez un service").max(160),
   volume: z.string().trim().max(80).optional().or(z.literal("")),
   message: z.string().trim().min(10, "Décrivez votre besoin (10 caractères min.)").max(1000),
+  charterAccepted: z.literal(true, {
+    errorMap: () => ({ message: "Vous devez accepter la charte éthique / NDA pour continuer." }),
+  }),
 });
 
 type Confirmation = {
