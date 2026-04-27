@@ -249,6 +249,36 @@ const quoteSchema = z.object({
   message: z.string().trim().min(10, "Décrivez votre besoin (10 caractères min.)").max(1000),
 });
 
+type Confirmation = {
+  reference: string;
+  submittedAt: string; // ISO
+  name: string;
+  email: string;
+  company: string;
+  service: string;
+  volume: string;
+  message: string;
+};
+
+function generateReference(): string {
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const dd = String(now.getDate()).padStart(2, "0");
+  // 5 chars alphanum aléatoires (sans I/O/0/1 pour lisibilité)
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let suffix = "";
+  const cryptoObj = typeof window !== "undefined" ? window.crypto : undefined;
+  if (cryptoObj?.getRandomValues) {
+    const buf = new Uint32Array(5);
+    cryptoObj.getRandomValues(buf);
+    for (let i = 0; i < 5; i++) suffix += alphabet[buf[i] % alphabet.length];
+  } else {
+    for (let i = 0; i < 5; i++) suffix += alphabet[Math.floor(Math.random() * alphabet.length)];
+  }
+  return `TBA-${yyyy}${mm}${dd}-${suffix}`;
+}
+
 function Services() {
   const [form, setForm] = useState({
     name: "",
@@ -259,7 +289,9 @@ function Services() {
     message: "",
   });
   const [sending, setSending] = useState(false);
+  const [confirmation, setConfirmation] = useState<Confirmation | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
+  const confirmRef = useRef<HTMLDivElement | null>(null);
 
   // Pré-remplissage via query string ?service=...
   useEffect(() => {
@@ -273,10 +305,33 @@ function Services() {
 
   function preselectService(name: string) {
     setForm((f) => ({ ...f, service: name }));
+    setConfirmation(null);
     if (typeof document !== "undefined") {
       document.getElementById("devis")?.scrollIntoView({ behavior: "smooth", block: "start" });
       // focus le premier champ après le scroll
       setTimeout(() => formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus(), 450);
+    }
+  }
+
+  function resetForNewRequest() {
+    setConfirmation(null);
+    setForm({
+      name: "",
+      email: "",
+      company: "",
+      service: "Services",
+      volume: "",
+      message: "",
+    });
+    setTimeout(() => formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus(), 100);
+  }
+
+  async function copyReference(ref: string) {
+    try {
+      await navigator.clipboard.writeText(ref);
+      toast.success("Numéro de référence copié");
+    } catch {
+      toast.error("Impossible de copier — sélectionnez le numéro manuellement");
     }
   }
 
@@ -289,8 +344,12 @@ function Services() {
     }
     setSending(true);
     void (async () => {
+      const reference = generateReference();
+      const submittedAt = new Date().toISOString();
       const composedMessage =
         `[Demande de devis — ${r.data.service}]\n` +
+        `Référence : ${reference}\n` +
+        `Date : ${submittedAt}\n` +
         (r.data.company ? `Société : ${r.data.company}\n` : "") +
         (r.data.volume ? `Volume / cadence estimés : ${r.data.volume}\n` : "") +
         `\n${r.data.message}`;
@@ -304,15 +363,21 @@ function Services() {
         toast.error("Une erreur est survenue. Réessayez.");
         return;
       }
-      toast.success("Votre demande de devis a bien été envoyée. Nous revenons vers vous sous 48h.");
-      setForm({
-        name: "",
-        email: "",
-        company: "",
+      toast.success(`Demande envoyée — référence ${reference}`);
+      setConfirmation({
+        reference,
+        submittedAt,
+        name: r.data.name,
+        email: r.data.email,
+        company: r.data.company ?? "",
         service: r.data.service,
-        volume: "",
-        message: "",
+        volume: r.data.volume ?? "",
+        message: r.data.message,
       });
+      // scroll vers la confirmation
+      setTimeout(() => {
+        confirmRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 50);
     })();
   }
 
