@@ -290,6 +290,7 @@ function Services() {
     service: "Services",
     volume: "",
     message: "",
+    charterAccepted: false,
   });
   const [sending, setSending] = useState(false);
   const [confirmation, setConfirmation] = useState<Confirmation | null>(null);
