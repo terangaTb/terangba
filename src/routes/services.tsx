@@ -34,6 +34,12 @@ import {
   Send,
   FileText,
   Building2,
+  Copy,
+  Printer,
+  Hash,
+  CalendarClock,
+  Mail,
+  User as UserIcon,
 } from "lucide-react";
 
 const SITE_URL = "https://teranga-africa-connect.lovable.app";
