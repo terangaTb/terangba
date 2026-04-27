@@ -357,6 +357,7 @@ function Services() {
         `Date : ${submittedAt}\n` +
         (r.data.company ? `Société : ${r.data.company}\n` : "") +
         (r.data.volume ? `Volume / cadence estimés : ${r.data.volume}\n` : "") +
+        `Charte éthique / NDA : acceptée le ${submittedAt}\n` +
         `\n${r.data.message}`;
       const { error } = await supabase.from("contact_requests").insert({
         name: r.data.name,
