@@ -326,6 +326,7 @@ function Services() {
       service: "Services",
       volume: "",
       message: "",
+      charterAccepted: false,
     });
     setTimeout(() => formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus(), 100);
   }
