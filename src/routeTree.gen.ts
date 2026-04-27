@@ -15,6 +15,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as EngagementsStandardsRouteImport } from './routes/engagements.standards'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -47,6 +48,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EngagementsStandardsRoute = EngagementsStandardsRouteImport.update({
+  id: '/standards',
+  path: '/standards',
+  getParentRoute: () => EngagementsRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
@@ -57,18 +63,20 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
-  '/engagements': typeof EngagementsRoute
+  '/engagements': typeof EngagementsRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
-  '/engagements': typeof EngagementsRoute
+  '/engagements': typeof EngagementsRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -76,9 +84,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
-  '/engagements': typeof EngagementsRoute
+  '/engagements': typeof EngagementsRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/engagements'
     | '/services'
     | '/admin/login'
+    | '/engagements/standards'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/engagements'
     | '/services'
     | '/admin/login'
+    | '/engagements/standards'
     | '/admin'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/engagements'
     | '/services'
     | '/admin/login'
+    | '/engagements/standards'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -115,7 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AProposRoute: typeof AProposRoute
   ContactRoute: typeof ContactRoute
-  EngagementsRoute: typeof EngagementsRoute
+  EngagementsRoute: typeof EngagementsRouteWithChildren
   ServicesRoute: typeof ServicesRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -165,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/engagements/standards': {
+      id: '/engagements/standards'
+      path: '/standards'
+      fullPath: '/engagements/standards'
+      preLoaderRoute: typeof EngagementsStandardsRouteImport
+      parentRoute: typeof EngagementsRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/admin/login'
@@ -175,11 +194,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface EngagementsRouteChildren {
+  EngagementsStandardsRoute: typeof EngagementsStandardsRoute
+}
+
+const EngagementsRouteChildren: EngagementsRouteChildren = {
+  EngagementsStandardsRoute: EngagementsStandardsRoute,
+}
+
+const EngagementsRouteWithChildren = EngagementsRoute._addFileChildren(
+  EngagementsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
   ContactRoute: ContactRoute,
-  EngagementsRoute: EngagementsRoute,
+  EngagementsRoute: EngagementsRouteWithChildren,
   ServicesRoute: ServicesRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminIndexRoute: AdminIndexRoute,
