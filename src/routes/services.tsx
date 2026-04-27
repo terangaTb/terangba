@@ -247,6 +247,9 @@ const quoteSchema = z.object({
   service: z.string().trim().min(2, "Sélectionnez un service").max(160),
   volume: z.string().trim().max(80).optional().or(z.literal("")),
   message: z.string().trim().min(10, "Décrivez votre besoin (10 caractères min.)").max(1000),
+  charterAccepted: z.literal(true, {
+    errorMap: () => ({ message: "Vous devez accepter la charte éthique / NDA pour continuer." }),
+  }),
 });
 
 type Confirmation = {
@@ -287,6 +290,7 @@ function Services() {
     service: "Services",
     volume: "",
     message: "",
+    charterAccepted: false,
   });
   const [sending, setSending] = useState(false);
   const [confirmation, setConfirmation] = useState<Confirmation | null>(null);
@@ -322,6 +326,7 @@ function Services() {
       service: "Services",
       volume: "",
       message: "",
+      charterAccepted: false,
     });
     setTimeout(() => formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus(), 100);
   }
@@ -352,6 +357,7 @@ function Services() {
         `Date : ${submittedAt}\n` +
         (r.data.company ? `Société : ${r.data.company}\n` : "") +
         (r.data.volume ? `Volume / cadence estimés : ${r.data.volume}\n` : "") +
+        `Charte éthique / NDA : acceptée le ${submittedAt}\n` +
         `\n${r.data.message}`;
       const { error } = await supabase.from("contact_requests").insert({
         name: r.data.name,
@@ -877,9 +883,40 @@ function Services() {
                   </div>
                 </div>
 
+                <label
+                  htmlFor="q-charter"
+                  className="mt-6 flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-secondary/40 p-4 transition-colors hover:border-primary/40 hover:bg-secondary/60"
+                >
+                  <input
+                    id="q-charter"
+                    name="charterAccepted"
+                    type="checkbox"
+                    checked={form.charterAccepted}
+                    onChange={(e) => setForm({ ...form, charterAccepted: e.target.checked })}
+                    required
+                    aria-describedby="q-charter-desc"
+                    className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-input accent-[oklch(0.42_0.11_155)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                  />
+                  <span className="text-sm leading-relaxed text-foreground/90">
+                    Je confirme avoir lu et accepté la{" "}
+                    <Link
+                      to="/engagements"
+                      hash="charte"
+                      className="font-semibold text-primary underline-offset-2 hover:underline"
+                    >
+                      charte éthique / NDA
+                    </Link>{" "}
+                    de Teranga Bridge Africa. <span className="text-destructive">*</span>
+                    <span id="q-charter-desc" className="mt-1 block text-xs text-muted-foreground">
+                      Confidentialité de vos informations, anti-corruption et engagements
+                      réciproques.
+                    </span>
+                  </span>
+                </label>
+
                 <button
                   type="submit"
-                  disabled={sending}
+                  disabled={sending || !form.charterAccepted}
                   className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[image:var(--gradient-primary)] px-6 py-3 font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <Send className="h-4 w-4" />
