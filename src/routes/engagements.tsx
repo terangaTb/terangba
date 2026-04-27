@@ -341,6 +341,14 @@ function Engagements() {
               Chaque engagement est suivi par des indicateurs précis et revu trimestriellement avec
               nos équipes et partenaires.
             </p>
+            <div className="mt-6">
+              <Link
+                to="/engagements/standards"
+                className="inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-primary)] px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                Voir le détail des standards <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
 
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
