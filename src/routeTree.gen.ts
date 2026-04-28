@@ -16,6 +16,7 @@ import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as EngagementsStandardsRouteImport } from './routes/engagements.standards'
+import { Route as DebugSsrRouteImport } from './routes/debug.ssr'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -53,6 +54,11 @@ const EngagementsStandardsRoute = EngagementsStandardsRouteImport.update({
   path: '/standards',
   getParentRoute: () => EngagementsRoute,
 } as any)
+const DebugSsrRoute = DebugSsrRouteImport.update({
+  id: '/debug/ssr',
+  path: '/debug/ssr',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/engagements': typeof EngagementsRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/debug/ssr': typeof DebugSsrRoute
   '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/engagements': typeof EngagementsRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/debug/ssr': typeof DebugSsrRoute
   '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/engagements': typeof EngagementsRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/debug/ssr': typeof DebugSsrRoute
   '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/engagements'
     | '/services'
     | '/admin/login'
+    | '/debug/ssr'
     | '/engagements/standards'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/engagements'
     | '/services'
     | '/admin/login'
+    | '/debug/ssr'
     | '/engagements/standards'
     | '/admin'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/engagements'
     | '/services'
     | '/admin/login'
+    | '/debug/ssr'
     | '/engagements/standards'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   EngagementsRoute: typeof EngagementsRouteWithChildren
   ServicesRoute: typeof ServicesRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  DebugSsrRoute: typeof DebugSsrRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -184,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EngagementsStandardsRouteImport
       parentRoute: typeof EngagementsRoute
     }
+    '/debug/ssr': {
+      id: '/debug/ssr'
+      path: '/debug/ssr'
+      fullPath: '/debug/ssr'
+      preLoaderRoute: typeof DebugSsrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/admin/login'
@@ -213,6 +233,7 @@ const rootRouteChildren: RootRouteChildren = {
   EngagementsRoute: EngagementsRouteWithChildren,
   ServicesRoute: ServicesRoute,
   AdminLoginRoute: AdminLoginRoute,
+  DebugSsrRoute: DebugSsrRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
