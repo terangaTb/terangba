@@ -629,23 +629,26 @@ function Contact() {
                 </button>
               </div>
             </form>
+            )}
 
             {/* Below-form micro reassurance */}
-            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {[
-                "Réponse sous 48h ouvrées",
-                "Devis gratuit & sans engagement",
-                "NDA disponible sur demande",
-              ].map((t) => (
-                <div
-                  key={t}
-                  className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm text-muted-foreground"
-                >
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                  {t}
-                </div>
-              ))}
-            </div>
+            {!sentInfo && (
+              <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {[
+                  "Réponse sous 48h ouvrées",
+                  "Devis gratuit & sans engagement",
+                  "NDA disponible sur demande",
+                ].map((t) => (
+                  <div
+                    key={t}
+                    className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm text-muted-foreground"
+                  >
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+                    {t}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>
