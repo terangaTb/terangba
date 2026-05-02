@@ -78,6 +78,18 @@ function Contact() {
     consent: false,
   });
   const [sending, setSending] = useState(false);
+  const [sentInfo, setSentInfo] = useState<{ name: string; email: string } | null>(null);
+
+  function resetForm() {
+    setForm({
+      name: "",
+      email: "",
+      company: "",
+      subject: SUBJECTS[0],
+      message: "",
+      consent: false,
+    });
+  }
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -103,14 +115,17 @@ function Contact() {
         return;
       }
       toast.success("Message envoyé. Notre équipe revient vers vous sous 48h ouvrées.");
-      setForm({
-        name: "",
-        email: "",
-        company: "",
-        subject: SUBJECTS[0],
-        message: "",
-        consent: false,
-      });
+      setSentInfo({ name: r.data.name, email: r.data.email });
+      resetForm();
+      // Smooth scroll to the confirmation panel
+      if (typeof window !== "undefined") {
+        setTimeout(() => {
+          document.getElementById("contact-confirmation")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }, 50);
+      }
     })();
   }
 
@@ -381,8 +396,104 @@ function Contact() {
             </div>
           </aside>
 
-          {/* ----- RIGHT: Form ----- */}
-          <div className="lg:col-span-3">
+          {/* ----- RIGHT: Form OR Confirmation ----- */}
+          <div className="lg:col-span-3" id="contact-confirmation">
+            {sentInfo ? (
+              <div
+                role="status"
+                aria-live="polite"
+                className="animate-scale-in relative overflow-hidden rounded-2xl border border-primary/20 bg-card p-8 shadow-[var(--shadow-elegant)] md:p-12"
+              >
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full opacity-25 blur-3xl"
+                  style={{ background: "var(--gradient-primary)" }}
+                />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -bottom-24 -left-24 h-56 w-56 rounded-full opacity-20 blur-3xl"
+                  style={{ background: "var(--gradient-gold)" }}
+                />
+
+                <div className="relative">
+                  <div className="animate-glow-pulse mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[image:var(--gradient-primary)] shadow-[var(--shadow-elegant)]">
+                    <CheckCircle2 className="h-10 w-10 text-white" strokeWidth={2.2} />
+                  </div>
+
+                  <div className="mt-7 text-center">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+                      <Sparkles className="h-3.5 w-3.5" />
+                      Message reçu
+                    </span>
+                    <h2 className="mt-5 font-display text-3xl font-bold text-foreground md:text-4xl">
+                      Merci, <span className="text-primary">{sentInfo.name.split(" ")[0]}</span> !
+                    </h2>
+                    <p className="mx-auto mt-4 max-w-lg text-base text-muted-foreground">
+                      Votre message a bien été transmis à notre équipe. Une confirmation a été
+                      enregistrée pour{" "}
+                      <strong className="text-foreground">{sentInfo.email}</strong>.
+                    </p>
+                  </div>
+
+                  <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                    {[
+                      { icon: CheckCircle2, label: "Reçu", value: "À l'instant" },
+                      { icon: Clock, label: "Réponse", value: "Sous 48h ouvrées" },
+                      { icon: ShieldCheck, label: "Confidentiel", value: "Vos données protégées" },
+                    ].map((s) => (
+                      <div
+                        key={s.label}
+                        className="rounded-xl border border-border bg-background/60 p-4 text-center backdrop-blur-sm"
+                      >
+                        <s.icon className="mx-auto h-5 w-5 text-primary" />
+                        <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                          {s.label}
+                        </div>
+                        <div className="mt-1 text-sm font-semibold text-foreground">{s.value}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSentInfo(null);
+                        setTimeout(() => {
+                          document
+                            .getElementById("contact-confirmation")
+                            ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }, 50);
+                      }}
+                      className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-6 py-2.5 text-sm font-semibold text-foreground transition hover:border-primary hover:text-primary"
+                    >
+                      <Send className="h-4 w-4" />
+                      Envoyer un autre message
+                    </button>
+                    <Link
+                      to="/"
+                      className="group inline-flex items-center gap-2 rounded-full bg-[image:var(--gradient-primary)] px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition hover:-translate-y-0.5"
+                    >
+                      Retour à l'accueil
+                      <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                    </Link>
+                  </div>
+
+                  <p className="mt-6 text-center text-xs text-muted-foreground">
+                    Besoin d'une réponse immédiate ?{" "}
+                    <a
+                      href="https://wa.me/221338920721"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-primary hover:underline"
+                    >
+                      Contactez-nous sur WhatsApp
+                    </a>
+                    .
+                  </p>
+                </div>
+              </div>
+            ) : (
             <form
               onSubmit={submit}
               className="relative overflow-hidden rounded-2xl border border-border bg-card p-7 shadow-[var(--shadow-elegant)] md:p-10"
@@ -518,23 +629,26 @@ function Contact() {
                 </button>
               </div>
             </form>
+            )}
 
             {/* Below-form micro reassurance */}
-            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {[
-                "Réponse sous 48h ouvrées",
-                "Devis gratuit & sans engagement",
-                "NDA disponible sur demande",
-              ].map((t) => (
-                <div
-                  key={t}
-                  className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm text-muted-foreground"
-                >
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                  {t}
-                </div>
-              ))}
-            </div>
+            {!sentInfo && (
+              <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {[
+                  "Réponse sous 48h ouvrées",
+                  "Devis gratuit & sans engagement",
+                  "NDA disponible sur demande",
+                ].map((t) => (
+                  <div
+                    key={t}
+                    className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm text-muted-foreground"
+                  >
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+                    {t}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>
