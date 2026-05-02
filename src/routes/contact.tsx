@@ -78,6 +78,18 @@ function Contact() {
     consent: false,
   });
   const [sending, setSending] = useState(false);
+  const [sentInfo, setSentInfo] = useState<{ name: string; email: string } | null>(null);
+
+  function resetForm() {
+    setForm({
+      name: "",
+      email: "",
+      company: "",
+      subject: SUBJECTS[0],
+      message: "",
+      consent: false,
+    });
+  }
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -103,14 +115,17 @@ function Contact() {
         return;
       }
       toast.success("Message envoyé. Notre équipe revient vers vous sous 48h ouvrées.");
-      setForm({
-        name: "",
-        email: "",
-        company: "",
-        subject: SUBJECTS[0],
-        message: "",
-        consent: false,
-      });
+      setSentInfo({ name: r.data.name, email: r.data.email });
+      resetForm();
+      // Smooth scroll to the confirmation panel
+      if (typeof window !== "undefined") {
+        setTimeout(() => {
+          document.getElementById("contact-confirmation")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }, 50);
+      }
     })();
   }
 
