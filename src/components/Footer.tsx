@@ -32,8 +32,8 @@ export function Footer() {
         <div>
           <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-foreground">Contact</h4>
           <ul className="space-y-3 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-gold" /><span>Sacré Cœur 3 VDN, 57, Dakar, Sénégal</span></li>
-            <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-gold" /><span>+221 33 892 07 21</span></li>
+            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-gold" /><span>4P - 6, Imm. Elh Omar DIA, Boulevard de l'Est x Rue 9, Point E, Dakar (SN)</span></li>
+            <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-gold" /><span>+221 78 307 36 36</span></li>
             <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-gold" /><span>contact@terangabridgeafrica.com</span></li>
           </ul>
         </div>
@@ -42,7 +42,7 @@ export function Footer() {
           <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-foreground">Horaires</h4>
           <p className="text-sm text-muted-foreground">Lun – Ven : 8h – 18h<br />Sam : 9h – 13h</p>
           <a
-            href="https://wa.me/221338920721"
+            href="https://wa.me/221783073636"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-gold)] px-4 py-2 text-sm font-semibold text-gold-foreground shadow-[var(--shadow-gold)]"
