@@ -32,7 +32,7 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Contactez Teranga Bridge Africa à Dakar. Réponse sous 48h ouvrées. Tél +221 33 892 07 21 — contact@terangabridgeafrica.com. Devis, partenariats, sourcing.",
+          "Contactez Teranga Bridge Africa à Dakar. Réponse sous 48h ouvrées. Tél +221 78 307 36 36 — contact@terangabridgeafrica.com. Devis, partenariats, sourcing.",
       },
       { property: "og:title", content: "Contact — Teranga Bridge Africa" },
       {
@@ -190,11 +190,11 @@ function Contact() {
             {/* Quick action chips */}
             <div className="mt-10 flex flex-wrap gap-3">
               <a
-                href="tel:+221338920721"
+                href="tel:+221783073636"
                 className="group inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-sm transition hover:bg-white/20"
               >
                 <Phone className="h-4 w-4 text-[color:var(--gold)]" />
-                +221 33 892 07 21
+                +221 78 307 36 36
                 <ArrowRight className="h-3.5 w-3.5 opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" />
               </a>
               <a
@@ -206,7 +206,7 @@ function Contact() {
                 <ArrowRight className="h-3.5 w-3.5 opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" />
               </a>
               <a
-                href="https://wa.me/221338920721"
+                href="https://wa.me/221783073636"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-2 rounded-full bg-[image:var(--gradient-gold)] px-5 py-2.5 text-sm font-semibold text-[color:var(--gold-foreground)] shadow-[var(--shadow-gold)] transition hover:-translate-y-0.5"
@@ -287,7 +287,9 @@ function Contact() {
                       Adresse
                     </div>
                     <p className="mt-1 text-sm text-foreground">
-                      Sacré Cœur 3 VDN, n°57
+                      4P - 6, Imm. Elh Omar DIA
+                      <br />
+                      Boulevard de l'Est x Rue 9, Point E
                       <br />
                       Dakar, Sénégal
                     </p>
@@ -303,10 +305,10 @@ function Contact() {
                       Téléphone
                     </div>
                     <a
-                      href="tel:+221338920721"
+                      href="tel:+221783073636"
                       className="mt-1 block text-sm font-medium text-foreground transition hover:text-primary"
                     >
-                      +221 33 892 07 21
+                      +221 78 307 36 36
                     </a>
                   </div>
                 </li>
@@ -358,7 +360,7 @@ function Contact() {
                     <Linkedin className="h-4 w-4" />
                   </a>
                   <a
-                    href="https://wa.me/221338920721"
+                    href="https://wa.me/221783073636"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="WhatsApp"
@@ -482,7 +484,7 @@ function Contact() {
                   <p className="mt-6 text-center text-xs text-muted-foreground">
                     Besoin d'une réponse immédiate ?{" "}
                     <a
-                      href="https://wa.me/221338920721"
+                      href="https://wa.me/221783073636"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-semibold text-primary hover:underline"

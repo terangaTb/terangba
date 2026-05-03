@@ -1,4 +1,4 @@
-import { Calendar, MapPin, ArrowRight } from "lucide-react";
+import { Calendar, MapPin, ArrowRight, Users, Building2, Briefcase, Eye, Trophy } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import senefoodImg from "@/assets/senefood-2026.jpg";
 
@@ -92,6 +92,52 @@ export function SenefoodBanner() {
           >
             Planifier une rencontre <ArrowRight className="h-4 w-4" />
           </Link>
+        </div>
+      </div>
+
+      {/* SENEFOOD — Chiffres clés */}
+      <div className="border-t border-border/60 bg-background/60 backdrop-blur">
+        <div className="container mx-auto px-4 py-12">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="text-xs font-bold uppercase tracking-widest text-gold">
+              SENEFOOD & SENEPACK — En chiffres
+            </span>
+            <h3 className="mt-3 font-display text-2xl font-bold md:text-3xl">
+              Le rendez-vous incontournable de l'agro-industrie ouest-africaine
+            </h3>
+          </div>
+          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-5">
+            {[
+              { icon: Users, v: "10 000+", l: "Visiteurs professionnels" },
+              { icon: Building2, v: "200+", l: "Exposants" },
+              { icon: Briefcase, v: "30+", l: "Pays représentés" },
+              { icon: Trophy, v: "5e", l: "Édition" },
+              { icon: Eye, v: "50+", l: "Partenaires officiels" },
+            ].map((s) => (
+              <div
+                key={s.l}
+                className="rounded-xl border border-border bg-card p-5 text-center shadow-sm transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)]"
+              >
+                <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-[image:var(--gradient-gold)] text-gold-foreground shadow-[var(--shadow-gold)]">
+                  <s.icon className="h-5 w-5" />
+                </div>
+                <div className="mt-3 font-display text-2xl font-bold text-primary md:text-3xl">
+                  {s.v}
+                </div>
+                <div className="mt-1 text-xs font-medium text-muted-foreground">{s.l}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Slogan */}
+          <div className="mt-12 overflow-hidden rounded-2xl bg-[image:var(--gradient-primary)] px-6 py-10 text-center shadow-[var(--shadow-elegant)] md:px-12">
+            <p className="font-display text-2xl font-bold leading-tight text-primary-foreground md:text-4xl">
+              « Plus qu'un partenaire,{" "}
+              <span className="bg-[image:var(--gradient-gold)] bg-clip-text text-transparent">
+                nous construisons ensemble !
+              </span>{" "}»
+            </p>
+          </div>
         </div>
       </div>
     </section>
