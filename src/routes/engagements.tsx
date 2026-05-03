@@ -181,7 +181,7 @@ const organizationJsonLd = {
     "Entreprise sénégalaise spécialisée dans la fourniture de matières premières et d'équipements agroalimentaires pour les industries africaines.",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Sacré Cœur 3 VDN, 57",
+    streetAddress: "4P - 6, Imm. Elh Omar DIA, Boulevard de l'Est x Rue 9, Point E",
     addressLocality: "Dakar",
     addressCountry: "SN",
   },

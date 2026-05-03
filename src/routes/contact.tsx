@@ -287,7 +287,9 @@ function Contact() {
                       Adresse
                     </div>
                     <p className="mt-1 text-sm text-foreground">
-                      Sacré Cœur 3 VDN, n°57
+                      4P - 6, Imm. Elh Omar DIA
+                      <br />
+                      Boulevard de l'Est x Rue 9, Point E
                       <br />
                       Dakar, Sénégal
                     </p>
