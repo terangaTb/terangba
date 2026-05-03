@@ -17,6 +17,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as EngagementsStandardsRouteImport } from './routes/engagements.standards'
 import { Route as DebugSsrRouteImport } from './routes/debug.ssr'
+import { Route as AideGithubRouteImport } from './routes/aide.github'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -59,6 +60,11 @@ const DebugSsrRoute = DebugSsrRouteImport.update({
   path: '/debug/ssr',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AideGithubRoute = AideGithubRouteImport.update({
+  id: '/aide/github',
+  path: '/aide/github',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/engagements': typeof EngagementsRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/aide/github': typeof AideGithubRoute
   '/debug/ssr': typeof DebugSsrRoute
   '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin/': typeof AdminIndexRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/engagements': typeof EngagementsRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/aide/github': typeof AideGithubRoute
   '/debug/ssr': typeof DebugSsrRoute
   '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin': typeof AdminIndexRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/engagements': typeof EngagementsRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/aide/github': typeof AideGithubRoute
   '/debug/ssr': typeof DebugSsrRoute
   '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin/': typeof AdminIndexRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/engagements'
     | '/services'
     | '/admin/login'
+    | '/aide/github'
     | '/debug/ssr'
     | '/engagements/standards'
     | '/admin/'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/engagements'
     | '/services'
     | '/admin/login'
+    | '/aide/github'
     | '/debug/ssr'
     | '/engagements/standards'
     | '/admin'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/engagements'
     | '/services'
     | '/admin/login'
+    | '/aide/github'
     | '/debug/ssr'
     | '/engagements/standards'
     | '/admin/'
@@ -142,6 +154,7 @@ export interface RootRouteChildren {
   EngagementsRoute: typeof EngagementsRouteWithChildren
   ServicesRoute: typeof ServicesRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AideGithubRoute: typeof AideGithubRoute
   DebugSsrRoute: typeof DebugSsrRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DebugSsrRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aide/github': {
+      id: '/aide/github'
+      path: '/aide/github'
+      fullPath: '/aide/github'
+      preLoaderRoute: typeof AideGithubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/admin/login'
@@ -233,6 +253,7 @@ const rootRouteChildren: RootRouteChildren = {
   EngagementsRoute: EngagementsRouteWithChildren,
   ServicesRoute: ServicesRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AideGithubRoute: AideGithubRoute,
   DebugSsrRoute: DebugSsrRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
