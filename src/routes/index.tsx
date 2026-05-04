@@ -83,7 +83,7 @@ function Home() {
             </h2>
           </div>
           <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-elegant)]">
+            <div className="group relative overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-elegant)]">
               <div className="relative aspect-video w-full bg-secondary/40">
                 <video
                   controls
@@ -109,6 +109,21 @@ function Home() {
                   />
                   Votre navigateur ne prend pas en charge la lecture vidéo.
                 </video>
+                {/* CTA overlay — masqué pendant la lecture pour ne pas gêner */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-wrap items-center justify-center gap-3 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 opacity-100 transition-opacity duration-300 group-hover:opacity-100 md:p-6">
+                  <Link
+                    to="/services"
+                    className="pointer-events-auto inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-primary)] px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform hover:-translate-y-0.5"
+                  >
+                    Découvrir nos services <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    to="/contact"
+                    className="pointer-events-auto inline-flex items-center gap-2 rounded-md border border-white/40 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
+                  >
+                    Nous contacter
+                  </Link>
+                </div>
               </div>
             </div>
             <div className="space-y-5 text-muted-foreground">
@@ -125,6 +140,20 @@ function Home() {
                 <br />
                 <span className="font-semibold text-foreground">L'aventure continue.</span>
               </p>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Link
+                  to="/services"
+                  className="inline-flex items-center gap-2 rounded-md bg-[image:var(--gradient-primary)] px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform hover:-translate-y-0.5"
+                >
+                  Nos services <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
+                >
+                  Nous contacter
+                </Link>
+              </div>
             </div>
           </div>
         </div>
