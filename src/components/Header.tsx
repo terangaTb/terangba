@@ -58,12 +58,15 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <BrandMarquee />
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-3">
           <img
             src={logo}
             alt="Teranga Bridge Africa"
             className="h-11 w-auto rounded-md object-contain"
           />
+          <span className="hidden font-display text-base font-bold uppercase tracking-[0.18em] text-foreground sm:inline-block">
+            Teranga <span className="bg-[image:var(--gradient-primary)] bg-clip-text text-transparent">Bridge Africa</span>
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
