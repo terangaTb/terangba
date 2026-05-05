@@ -91,6 +91,7 @@ function Contact() {
     setForm({
       name: "",
       email: "",
+      phone: "",
       company: "",
       subject: SUBJECTS[0],
       message: "",
