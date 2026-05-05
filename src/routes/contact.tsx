@@ -48,31 +48,110 @@ export const Route = createFileRoute("/contact")({
   component: Contact,
 });
 
-const schema = z.object({
-  name: z.string().trim().min(2, "Nom trop court").max(100),
-  email: z.string().trim().email("Email invalide").max(255),
-  phone: z
-    .string()
-    .trim()
-    .min(6, "Numéro trop court")
-    .max(30, "Numéro trop long")
-    .regex(/^[+0-9\s().-]+$/, "Numéro invalide"),
-  company: z.string().trim().max(120).optional().or(z.literal("")),
-  subject: z.string().trim().min(2, "Sujet requis").max(120),
-  message: z.string().trim().min(10, "Message trop court").max(1000),
-  consent: z.literal(true, {
-    errorMap: () => ({ message: "Veuillez accepter la politique de confidentialité." }),
-  }),
-});
+type Lang = "fr" | "en";
 
-const SUBJECTS = [
-  "Demande de devis",
-  "Sourcing & approvisionnement",
-  "Partenariat fournisseur",
-  "Logistique & transport",
-  "Presse / médias",
-  "Autre",
-];
+const makeSchema = (lang: Lang) =>
+  z.object({
+    name: z.string().trim().min(2, lang === "fr" ? "Nom trop court" : "Name too short").max(100),
+    email: z.string().trim().email(lang === "fr" ? "Email invalide" : "Invalid email").max(255),
+    phone: z
+      .string()
+      .trim()
+      .min(6, lang === "fr" ? "Numéro trop court" : "Number too short")
+      .max(30, lang === "fr" ? "Numéro trop long" : "Number too long")
+      .regex(/^[+0-9\s().-]+$/, lang === "fr" ? "Numéro invalide" : "Invalid number"),
+    company: z.string().trim().max(120).optional().or(z.literal("")),
+    subject: z.string().trim().min(2, lang === "fr" ? "Sujet requis" : "Subject required").max(120),
+    message: z
+      .string()
+      .trim()
+      .min(10, lang === "fr" ? "Message trop court" : "Message too short")
+      .max(1000),
+    consent: z.literal(true, {
+      errorMap: () => ({
+        message:
+          lang === "fr"
+            ? "Veuillez accepter la politique de confidentialité."
+            : "Please accept the privacy policy.",
+      }),
+    }),
+  });
+
+const SUBJECTS_BY_LANG: Record<Lang, string[]> = {
+  fr: [
+    "Demande de devis",
+    "Sourcing & approvisionnement",
+    "Partenariat fournisseur",
+    "Logistique & transport",
+    "Presse / médias",
+    "Autre",
+  ],
+  en: [
+    "Quote request",
+    "Sourcing & procurement",
+    "Supplier partnership",
+    "Logistics & transport",
+    "Press / media",
+    "Other",
+  ],
+};
+
+const T = {
+  fr: {
+    formuleEyebrow: "Formulaire",
+    title: "Envoyez-nous un message",
+    intro: "Remplissez le formulaire — un membre de l'équipe revient vers vous sous",
+    delay: "48h ouvrées",
+    name: "Nom complet",
+    namePh: "Aïssatou Diop",
+    email: "Email professionnel",
+    emailPh: "vous@entreprise.com",
+    phone: "Téléphone",
+    phonePh: "+221 78 307 36 36",
+    company: "Société",
+    companyPh: "Nom de votre entreprise",
+    subject: "Sujet",
+    message: "Votre message",
+    messagePh: "Décrivez votre besoin (volumes, produits, délais, destination)…",
+    consent: "J'accepte que mes données soient utilisées pour répondre à ma demande, conformément à la",
+    privacy: "politique de confidentialité",
+    consentSuffix: "de Teranga Bridge Africa.",
+    privacyNote: "Vos données restent confidentielles. Aucun spam, jamais.",
+    sending: "Envoi en cours…",
+    send: "Envoyer le message",
+    error: "Une erreur est survenue. Réessayez ou écrivez-nous directement par email.",
+    success: "Message envoyé. Notre équipe revient vers vous sous 48h ouvrées.",
+    phoneLineLabel: "Téléphone",
+    langLabel: "Langue",
+  },
+  en: {
+    formuleEyebrow: "Form",
+    title: "Send us a message",
+    intro: "Fill out the form — a team member will get back to you within",
+    delay: "48 business hours",
+    name: "Full name",
+    namePh: "Aïssatou Diop",
+    email: "Business email",
+    emailPh: "you@company.com",
+    phone: "Phone",
+    phonePh: "+221 78 307 36 36",
+    company: "Company",
+    companyPh: "Your company name",
+    subject: "Subject",
+    message: "Your message",
+    messagePh: "Describe your need (volumes, products, deadlines, destination)…",
+    consent: "I agree that my data will be used to respond to my request, in accordance with the",
+    privacy: "privacy policy",
+    consentSuffix: "of Teranga Bridge Africa.",
+    privacyNote: "Your data remains confidential. No spam, ever.",
+    sending: "Sending…",
+    send: "Send message",
+    error: "Something went wrong. Please retry or email us directly.",
+    success: "Message sent. Our team will respond within 48 business hours.",
+    phoneLineLabel: "Phone",
+    langLabel: "Language",
+  },
+} as const;
 
 function Contact() {
   const [form, setForm] = useState({
