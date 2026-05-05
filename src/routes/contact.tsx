@@ -773,6 +773,40 @@ function Contact() {
                   )}
                 </button>
               </div>
+            </form>
+            )}
+
+            {!sentInfo && (
+              <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {[
+                  lang === "fr" ? "Réponse sous 48h ouvrées" : "Response within 48 business hours",
+                  lang === "fr" ? "Devis gratuit & sans engagement" : "Free quote, no commitment",
+                  lang === "fr" ? "NDA disponible sur demande" : "NDA available on request",
+                ].map((tx) => (
+                  <div
+                    key={tx}
+                    className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm text-muted-foreground"
+                  >
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+                    {tx}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-border bg-secondary/30">
+        <div className="container mx-auto px-4 py-20">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold">
+              {lang === "fr" ? "Questions fréquentes" : "Frequently asked questions"}
+            </span>
+            <h2 className="mt-3 font-display text-3xl font-bold text-foreground md:text-4xl">
+              {lang === "fr" ? "Avant de nous écrire" : "Before reaching out"}
+            </h2>
+          </div>
 
           <div className="mx-auto mt-12 grid max-w-4xl gap-4">
             {FAQ.map((item, i) => (
