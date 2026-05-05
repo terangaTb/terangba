@@ -154,12 +154,35 @@ const T = {
 } as const;
 
 function Contact() {
+  const [lang, setLang] = useState<Lang>("fr");
+  const t = T[lang];
+  const SUBJECTS = SUBJECTS_BY_LANG[lang];
+
+  useEffect(() => {
+    if (typeof navigator === "undefined") return;
+    const stored = (typeof localStorage !== "undefined" && localStorage.getItem("tba-lang")) as
+      | Lang
+      | null;
+    if (stored === "fr" || stored === "en") {
+      setLang(stored);
+      return;
+    }
+    const nav = navigator.language?.toLowerCase() ?? "";
+    setLang(nav.startsWith("fr") ? "fr" : "en");
+  }, []);
+
+  function changeLang(next: Lang) {
+    setLang(next);
+    setForm((f) => ({ ...f, subject: SUBJECTS_BY_LANG[next][0] }));
+    if (typeof localStorage !== "undefined") localStorage.setItem("tba-lang", next);
+  }
+
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
     company: "",
-    subject: SUBJECTS[0],
+    subject: SUBJECTS_BY_LANG.fr[0],
     message: "",
     consent: false,
   });
@@ -180,7 +203,7 @@ function Contact() {
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    const r = schema.safeParse(form);
+    const r = makeSchema(lang).safeParse(form);
     if (!r.success) {
       toast.error(r.error.issues[0].message);
       return;
@@ -190,7 +213,7 @@ function Contact() {
       const composedMessage =
         `[${r.data.subject}]` +
         (r.data.company ? ` — ${r.data.company}` : "") +
-        `\nTéléphone : ${r.data.phone}` +
+        `\n${t.phoneLineLabel} : ${r.data.phone}` +
         `\n\n${r.data.message}`;
       const { error } = await supabase.from("contact_requests").insert({
         name: r.data.name,
@@ -199,10 +222,10 @@ function Contact() {
       });
       setSending(false);
       if (error) {
-        toast.error("Une erreur est survenue. Réessayez ou écrivez-nous directement par email.");
+        toast.error(t.error);
         return;
       }
-      toast.success("Message envoyé. Notre équipe revient vers vous sous 48h ouvrées.");
+      toast.success(t.success);
       setSentInfo({ name: r.data.name, email: r.data.email });
       resetForm();
       // Smooth scroll to the confirmation panel
