@@ -51,6 +51,12 @@ export const Route = createFileRoute("/contact")({
 const schema = z.object({
   name: z.string().trim().min(2, "Nom trop court").max(100),
   email: z.string().trim().email("Email invalide").max(255),
+  phone: z
+    .string()
+    .trim()
+    .min(6, "Numéro trop court")
+    .max(30, "Numéro trop long")
+    .regex(/^[+0-9\s().-]+$/, "Numéro invalide"),
   company: z.string().trim().max(120).optional().or(z.literal("")),
   subject: z.string().trim().min(2, "Sujet requis").max(120),
   message: z.string().trim().min(10, "Message trop court").max(1000),
@@ -72,6 +78,7 @@ function Contact() {
   const [form, setForm] = useState({
     name: "",
     email: "",
+    phone: "",
     company: "",
     subject: SUBJECTS[0],
     message: "",
@@ -84,6 +91,7 @@ function Contact() {
     setForm({
       name: "",
       email: "",
+      phone: "",
       company: "",
       subject: SUBJECTS[0],
       message: "",
@@ -103,6 +111,7 @@ function Contact() {
       const composedMessage =
         `[${r.data.subject}]` +
         (r.data.company ? ` — ${r.data.company}` : "") +
+        `\nTéléphone : ${r.data.phone}` +
         `\n\n${r.data.message}`;
       const { error } = await supabase.from("contact_requests").insert({
         name: r.data.name,
@@ -540,6 +549,18 @@ function Contact() {
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     maxLength={255}
                     placeholder="vous@entreprise.com"
+                    className="form-input"
+                    required
+                  />
+                </Field>
+
+                <Field label="Téléphone" required>
+                  <input
+                    type="tel"
+                    value={form.phone}
+                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    maxLength={30}
+                    placeholder="+221 78 307 36 36"
                     className="form-input"
                     required
                   />
