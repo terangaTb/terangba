@@ -554,6 +554,18 @@ function Contact() {
                   />
                 </Field>
 
+                <Field label="Téléphone" required>
+                  <input
+                    type="tel"
+                    value={form.phone}
+                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    maxLength={30}
+                    placeholder="+221 78 307 36 36"
+                    className="form-input"
+                    required
+                  />
+                </Field>
+
                 <Field label="Société">
                   <input
                     value={form.company}
