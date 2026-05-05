@@ -78,6 +78,7 @@ function Contact() {
   const [form, setForm] = useState({
     name: "",
     email: "",
+    phone: "",
     company: "",
     subject: SUBJECTS[0],
     message: "",
