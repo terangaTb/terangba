@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -48,39 +48,141 @@ export const Route = createFileRoute("/contact")({
   component: Contact,
 });
 
-const schema = z.object({
-  name: z.string().trim().min(2, "Nom trop court").max(100),
-  email: z.string().trim().email("Email invalide").max(255),
-  phone: z
-    .string()
-    .trim()
-    .min(6, "Numéro trop court")
-    .max(30, "Numéro trop long")
-    .regex(/^[+0-9\s().-]+$/, "Numéro invalide"),
-  company: z.string().trim().max(120).optional().or(z.literal("")),
-  subject: z.string().trim().min(2, "Sujet requis").max(120),
-  message: z.string().trim().min(10, "Message trop court").max(1000),
-  consent: z.literal(true, {
-    errorMap: () => ({ message: "Veuillez accepter la politique de confidentialité." }),
-  }),
-});
+type Lang = "fr" | "en";
 
-const SUBJECTS = [
-  "Demande de devis",
-  "Sourcing & approvisionnement",
-  "Partenariat fournisseur",
-  "Logistique & transport",
-  "Presse / médias",
-  "Autre",
-];
+const makeSchema = (lang: Lang) =>
+  z.object({
+    name: z.string().trim().min(2, lang === "fr" ? "Nom trop court" : "Name too short").max(100),
+    email: z.string().trim().email(lang === "fr" ? "Email invalide" : "Invalid email").max(255),
+    phone: z
+      .string()
+      .trim()
+      .min(6, lang === "fr" ? "Numéro trop court" : "Number too short")
+      .max(30, lang === "fr" ? "Numéro trop long" : "Number too long")
+      .regex(/^[+0-9\s().-]+$/, lang === "fr" ? "Numéro invalide" : "Invalid number"),
+    company: z.string().trim().max(120).optional().or(z.literal("")),
+    subject: z.string().trim().min(2, lang === "fr" ? "Sujet requis" : "Subject required").max(120),
+    message: z
+      .string()
+      .trim()
+      .min(10, lang === "fr" ? "Message trop court" : "Message too short")
+      .max(1000),
+    consent: z.literal(true, {
+      errorMap: () => ({
+        message:
+          lang === "fr"
+            ? "Veuillez accepter la politique de confidentialité."
+            : "Please accept the privacy policy.",
+      }),
+    }),
+  });
+
+const SUBJECTS_BY_LANG: Record<Lang, string[]> = {
+  fr: [
+    "Demande de devis",
+    "Sourcing & approvisionnement",
+    "Partenariat fournisseur",
+    "Logistique & transport",
+    "Presse / médias",
+    "Autre",
+  ],
+  en: [
+    "Quote request",
+    "Sourcing & procurement",
+    "Supplier partnership",
+    "Logistics & transport",
+    "Press / media",
+    "Other",
+  ],
+};
+
+const T = {
+  fr: {
+    formuleEyebrow: "Formulaire",
+    title: "Envoyez-nous un message",
+    intro: "Remplissez le formulaire — un membre de l'équipe revient vers vous sous",
+    delay: "48h ouvrées",
+    name: "Nom complet",
+    namePh: "Aïssatou Diop",
+    email: "Email professionnel",
+    emailPh: "vous@entreprise.com",
+    phone: "Téléphone",
+    phonePh: "+221 78 307 36 36",
+    company: "Société",
+    companyPh: "Nom de votre entreprise",
+    subject: "Sujet",
+    message: "Votre message",
+    messagePh: "Décrivez votre besoin (volumes, produits, délais, destination)…",
+    consent: "J'accepte que mes données soient utilisées pour répondre à ma demande, conformément à la",
+    privacy: "politique de confidentialité",
+    consentSuffix: "de Teranga Bridge Africa.",
+    privacyNote: "Vos données restent confidentielles. Aucun spam, jamais.",
+    sending: "Envoi en cours…",
+    send: "Envoyer le message",
+    error: "Une erreur est survenue. Réessayez ou écrivez-nous directement par email.",
+    success: "Message envoyé. Notre équipe revient vers vous sous 48h ouvrées.",
+    phoneLineLabel: "Téléphone",
+    langLabel: "Langue",
+  },
+  en: {
+    formuleEyebrow: "Form",
+    title: "Send us a message",
+    intro: "Fill out the form — a team member will get back to you within",
+    delay: "48 business hours",
+    name: "Full name",
+    namePh: "Aïssatou Diop",
+    email: "Business email",
+    emailPh: "you@company.com",
+    phone: "Phone",
+    phonePh: "+221 78 307 36 36",
+    company: "Company",
+    companyPh: "Your company name",
+    subject: "Subject",
+    message: "Your message",
+    messagePh: "Describe your need (volumes, products, deadlines, destination)…",
+    consent: "I agree that my data will be used to respond to my request, in accordance with the",
+    privacy: "privacy policy",
+    consentSuffix: "of Teranga Bridge Africa.",
+    privacyNote: "Your data remains confidential. No spam, ever.",
+    sending: "Sending…",
+    send: "Send message",
+    error: "Something went wrong. Please retry or email us directly.",
+    success: "Message sent. Our team will respond within 48 business hours.",
+    phoneLineLabel: "Phone",
+    langLabel: "Language",
+  },
+} as const;
 
 function Contact() {
+  const [lang, setLang] = useState<Lang>("fr");
+  const t = T[lang];
+  const SUBJECTS = SUBJECTS_BY_LANG[lang];
+
+  useEffect(() => {
+    if (typeof navigator === "undefined") return;
+    const stored = (typeof localStorage !== "undefined" && localStorage.getItem("tba-lang")) as
+      | Lang
+      | null;
+    if (stored === "fr" || stored === "en") {
+      setLang(stored);
+      return;
+    }
+    const nav = navigator.language?.toLowerCase() ?? "";
+    setLang(nav.startsWith("fr") ? "fr" : "en");
+  }, []);
+
+  function changeLang(next: Lang) {
+    setLang(next);
+    setForm((f) => ({ ...f, subject: SUBJECTS_BY_LANG[next][0] }));
+    if (typeof localStorage !== "undefined") localStorage.setItem("tba-lang", next);
+  }
+
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
     company: "",
-    subject: SUBJECTS[0],
+    subject: SUBJECTS_BY_LANG.fr[0],
     message: "",
     consent: false,
   });
@@ -101,7 +203,7 @@ function Contact() {
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    const r = schema.safeParse(form);
+    const r = makeSchema(lang).safeParse(form);
     if (!r.success) {
       toast.error(r.error.issues[0].message);
       return;
@@ -111,7 +213,7 @@ function Contact() {
       const composedMessage =
         `[${r.data.subject}]` +
         (r.data.company ? ` — ${r.data.company}` : "") +
-        `\nTéléphone : ${r.data.phone}` +
+        `\n${t.phoneLineLabel} : ${r.data.phone}` +
         `\n\n${r.data.message}`;
       const { error } = await supabase.from("contact_requests").insert({
         name: r.data.name,
@@ -120,10 +222,10 @@ function Contact() {
       });
       setSending(false);
       if (error) {
-        toast.error("Une erreur est survenue. Réessayez ou écrivez-nous directement par email.");
+        toast.error(t.error);
         return;
       }
-      toast.success("Message envoyé. Notre équipe revient vers vous sous 48h ouvrées.");
+      toast.success(t.success);
       setSentInfo({ name: r.data.name, email: r.data.email });
       resetForm();
       // Smooth scroll to the confirmation panel
@@ -516,67 +618,90 @@ function Contact() {
                 style={{ background: "var(--gradient-gold)" }}
               />
 
-              <div className="mb-7 flex items-center gap-2">
-                <div className="h-px w-8 bg-gold" />
-                <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold">
-                  Formulaire
-                </span>
+              <div className="mb-7 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="h-px w-8 bg-gold" />
+                  <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold">
+                    {t.formuleEyebrow}
+                  </span>
+                </div>
+                <div
+                  role="group"
+                  aria-label={t.langLabel}
+                  className="inline-flex overflow-hidden rounded-full border border-border bg-background text-[11px] font-semibold"
+                >
+                  {(["fr", "en"] as Lang[]).map((l) => (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => changeLang(l)}
+                      className={`px-3 py-1 uppercase tracking-wider transition ${
+                        lang === l
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                      aria-pressed={lang === l}
+                    >
+                      {l}
+                    </button>
+                  ))}
+                </div>
               </div>
               <h2 className="font-display text-2xl font-bold text-foreground md:text-3xl">
-                Envoyez-nous un message
+                {t.title}
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                Remplissez le formulaire — un membre de l'équipe revient vers vous sous{" "}
-                <strong className="text-foreground">48h ouvrées</strong>.
+                {t.intro}{" "}
+                <strong className="text-foreground">{t.delay}</strong>.
               </p>
 
               <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2">
-                <Field label="Nom complet" required>
+                <Field label={t.name} required>
                   <input
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     maxLength={100}
-                    placeholder="Aïssatou Diop"
+                    placeholder={t.namePh}
                     className="form-input"
                     required
                   />
                 </Field>
 
-                <Field label="Email professionnel" required>
+                <Field label={t.email} required>
                   <input
                     type="email"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     maxLength={255}
-                    placeholder="vous@entreprise.com"
+                    placeholder={t.emailPh}
                     className="form-input"
                     required
                   />
                 </Field>
 
-                <Field label="Téléphone" required>
+                <Field label={t.phone} required>
                   <input
                     type="tel"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     maxLength={30}
-                    placeholder="+221 78 307 36 36"
+                    placeholder={t.phonePh}
                     className="form-input"
                     required
                   />
                 </Field>
 
-                <Field label="Société">
+                <Field label={t.company}>
                   <input
                     value={form.company}
                     onChange={(e) => setForm({ ...form, company: e.target.value })}
                     maxLength={120}
-                    placeholder="Nom de votre entreprise"
+                    placeholder={t.companyPh}
                     className="form-input"
                   />
                 </Field>
 
-                <Field label="Sujet" required>
+                <Field label={t.subject} required>
                   <select
                     value={form.subject}
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}
@@ -594,13 +719,13 @@ function Contact() {
               </div>
 
               <div className="mt-5">
-                <Field label="Votre message" required>
+                <Field label={t.message} required>
                   <textarea
                     rows={6}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     maxLength={1000}
-                    placeholder="Décrivez votre besoin (volumes, produits, délais, destination)…"
+                    placeholder={t.messagePh}
                     className="form-input resize-y"
                     required
                   />
@@ -619,19 +744,16 @@ function Contact() {
                   required
                 />
                 <span className="text-muted-foreground">
-                  J'accepte que mes données soient utilisées pour répondre à ma demande,
-                  conformément à la{" "}
-                  <span className="font-medium text-foreground">
-                    politique de confidentialité
-                  </span>{" "}
-                  de Teranga Bridge Africa.
+                  {t.consent}{" "}
+                  <span className="font-medium text-foreground">{t.privacy}</span>{" "}
+                  {t.consentSuffix}
                 </span>
               </label>
 
               <div className="mt-7 flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="flex items-center gap-2 text-xs text-muted-foreground">
                   <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                  Vos données restent confidentielles. Aucun spam, jamais.
+                  {t.privacyNote}
                 </p>
                 <button
                   type="submit"
@@ -641,12 +763,12 @@ function Contact() {
                   {sending ? (
                     <>
                       <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />
-                      Envoi en cours…
+                      {t.sending}
                     </>
                   ) : (
                     <>
                       <Send className="h-4 w-4 transition group-hover:-rotate-12" />
-                      Envoyer le message
+                      {t.send}
                     </>
                   )}
                 </button>
@@ -654,20 +776,19 @@ function Contact() {
             </form>
             )}
 
-            {/* Below-form micro reassurance */}
             {!sentInfo && (
               <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {[
-                  "Réponse sous 48h ouvrées",
-                  "Devis gratuit & sans engagement",
-                  "NDA disponible sur demande",
-                ].map((t) => (
+                  lang === "fr" ? "Réponse sous 48h ouvrées" : "Response within 48 business hours",
+                  lang === "fr" ? "Devis gratuit & sans engagement" : "Free quote, no commitment",
+                  lang === "fr" ? "NDA disponible sur demande" : "NDA available on request",
+                ].map((tx) => (
                   <div
-                    key={t}
+                    key={tx}
                     className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm text-muted-foreground"
                   >
                     <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                    {t}
+                    {tx}
                   </div>
                 ))}
               </div>
@@ -676,19 +797,15 @@ function Contact() {
         </div>
       </section>
 
-      {/* ===================== FAQ ===================== */}
       <section className="border-t border-border bg-secondary/30">
         <div className="container mx-auto px-4 py-20">
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold">
-              Questions fréquentes
+              {lang === "fr" ? "Questions fréquentes" : "Frequently asked questions"}
             </span>
             <h2 className="mt-3 font-display text-3xl font-bold text-foreground md:text-4xl">
-              Avant de nous écrire
+              {lang === "fr" ? "Avant de nous écrire" : "Before reaching out"}
             </h2>
-            <p className="mt-3 text-muted-foreground">
-              Les réponses aux questions que l'on nous pose le plus souvent.
-            </p>
           </div>
 
           <div className="mx-auto mt-12 grid max-w-4xl gap-4">
