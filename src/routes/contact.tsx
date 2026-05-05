@@ -618,67 +618,90 @@ function Contact() {
                 style={{ background: "var(--gradient-gold)" }}
               />
 
-              <div className="mb-7 flex items-center gap-2">
-                <div className="h-px w-8 bg-gold" />
-                <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold">
-                  Formulaire
-                </span>
+              <div className="mb-7 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="h-px w-8 bg-gold" />
+                  <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold">
+                    {t.formuleEyebrow}
+                  </span>
+                </div>
+                <div
+                  role="group"
+                  aria-label={t.langLabel}
+                  className="inline-flex overflow-hidden rounded-full border border-border bg-background text-[11px] font-semibold"
+                >
+                  {(["fr", "en"] as Lang[]).map((l) => (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => changeLang(l)}
+                      className={`px-3 py-1 uppercase tracking-wider transition ${
+                        lang === l
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                      aria-pressed={lang === l}
+                    >
+                      {l}
+                    </button>
+                  ))}
+                </div>
               </div>
               <h2 className="font-display text-2xl font-bold text-foreground md:text-3xl">
-                Envoyez-nous un message
+                {t.title}
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                Remplissez le formulaire — un membre de l'équipe revient vers vous sous{" "}
-                <strong className="text-foreground">48h ouvrées</strong>.
+                {t.intro}{" "}
+                <strong className="text-foreground">{t.delay}</strong>.
               </p>
 
               <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2">
-                <Field label="Nom complet" required>
+                <Field label={t.name} required>
                   <input
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     maxLength={100}
-                    placeholder="Aïssatou Diop"
+                    placeholder={t.namePh}
                     className="form-input"
                     required
                   />
                 </Field>
 
-                <Field label="Email professionnel" required>
+                <Field label={t.email} required>
                   <input
                     type="email"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     maxLength={255}
-                    placeholder="vous@entreprise.com"
+                    placeholder={t.emailPh}
                     className="form-input"
                     required
                   />
                 </Field>
 
-                <Field label="Téléphone" required>
+                <Field label={t.phone} required>
                   <input
                     type="tel"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     maxLength={30}
-                    placeholder="+221 78 307 36 36"
+                    placeholder={t.phonePh}
                     className="form-input"
                     required
                   />
                 </Field>
 
-                <Field label="Société">
+                <Field label={t.company}>
                   <input
                     value={form.company}
                     onChange={(e) => setForm({ ...form, company: e.target.value })}
                     maxLength={120}
-                    placeholder="Nom de votre entreprise"
+                    placeholder={t.companyPh}
                     className="form-input"
                   />
                 </Field>
 
-                <Field label="Sujet" required>
+                <Field label={t.subject} required>
                   <select
                     value={form.subject}
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}
@@ -696,13 +719,13 @@ function Contact() {
               </div>
 
               <div className="mt-5">
-                <Field label="Votre message" required>
+                <Field label={t.message} required>
                   <textarea
                     rows={6}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     maxLength={1000}
-                    placeholder="Décrivez votre besoin (volumes, produits, délais, destination)…"
+                    placeholder={t.messagePh}
                     className="form-input resize-y"
                     required
                   />
@@ -721,19 +744,16 @@ function Contact() {
                   required
                 />
                 <span className="text-muted-foreground">
-                  J'accepte que mes données soient utilisées pour répondre à ma demande,
-                  conformément à la{" "}
-                  <span className="font-medium text-foreground">
-                    politique de confidentialité
-                  </span>{" "}
-                  de Teranga Bridge Africa.
+                  {t.consent}{" "}
+                  <span className="font-medium text-foreground">{t.privacy}</span>{" "}
+                  {t.consentSuffix}
                 </span>
               </label>
 
               <div className="mt-7 flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="flex items-center gap-2 text-xs text-muted-foreground">
                   <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                  Vos données restent confidentielles. Aucun spam, jamais.
+                  {t.privacyNote}
                 </p>
                 <button
                   type="submit"
@@ -743,55 +763,16 @@ function Contact() {
                   {sending ? (
                     <>
                       <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />
-                      Envoi en cours…
+                      {t.sending}
                     </>
                   ) : (
                     <>
                       <Send className="h-4 w-4 transition group-hover:-rotate-12" />
-                      Envoyer le message
+                      {t.send}
                     </>
                   )}
                 </button>
               </div>
-            </form>
-            )}
-
-            {/* Below-form micro reassurance */}
-            {!sentInfo && (
-              <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                {[
-                  "Réponse sous 48h ouvrées",
-                  "Devis gratuit & sans engagement",
-                  "NDA disponible sur demande",
-                ].map((t) => (
-                  <div
-                    key={t}
-                    className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm text-muted-foreground"
-                  >
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                    {t}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== FAQ ===================== */}
-      <section className="border-t border-border bg-secondary/30">
-        <div className="container mx-auto px-4 py-20">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold">
-              Questions fréquentes
-            </span>
-            <h2 className="mt-3 font-display text-3xl font-bold text-foreground md:text-4xl">
-              Avant de nous écrire
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              Les réponses aux questions que l'on nous pose le plus souvent.
-            </p>
-          </div>
 
           <div className="mx-auto mt-12 grid max-w-4xl gap-4">
             {FAQ.map((item, i) => (
