@@ -111,6 +111,7 @@ function Contact() {
       const composedMessage =
         `[${r.data.subject}]` +
         (r.data.company ? ` — ${r.data.company}` : "") +
+        `\nTéléphone : ${r.data.phone}` +
         `\n\n${r.data.message}`;
       const { error } = await supabase.from("contact_requests").insert({
         name: r.data.name,
