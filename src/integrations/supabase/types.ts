@@ -41,6 +41,51 @@ export type Database = {
         }
         Relationships: []
       }
+      meeting_requests: {
+        Row: {
+          company: string | null
+          country: string | null
+          created_at: string
+          description: string | null
+          email: string
+          id: string
+          meeting_type: string
+          name: string
+          phone: string
+          preferred_date: string
+          status: Database["public"]["Enums"]["meeting_status"]
+          time_slot: string
+        }
+        Insert: {
+          company?: string | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          email: string
+          id?: string
+          meeting_type: string
+          name: string
+          phone: string
+          preferred_date: string
+          status?: Database["public"]["Enums"]["meeting_status"]
+          time_slot: string
+        }
+        Update: {
+          company?: string | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string
+          id?: string
+          meeting_type?: string
+          name?: string
+          phone?: string
+          preferred_date?: string
+          status?: Database["public"]["Enums"]["meeting_status"]
+          time_slot?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -78,6 +123,7 @@ export type Database = {
     Enums: {
       app_role: "admin" | "user"
       contact_status: "new" | "in_progress" | "done"
+      meeting_status: "new" | "confirmed" | "cancelled" | "done"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -207,6 +253,7 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "user"],
       contact_status: ["new", "in_progress", "done"],
+      meeting_status: ["new", "confirmed", "cancelled", "done"],
     },
   },
 } as const
