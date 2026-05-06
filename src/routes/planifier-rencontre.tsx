@@ -169,10 +169,43 @@ function PlanifierRencontre() {
     });
     setSubmitting(false);
     if (error) {
+      setSubmitting(false);
       toast.error("Erreur lors de l'enregistrement. Réessayez.");
       return;
     }
-    toast.success("Votre rendez-vous a été enregistré !");
+
+    // Create Google Calendar event
+    try {
+      const [h, m] = form.time_slot.split(":").map(Number);
+      const start = new Date(form.preferred_date!);
+      start.setHours(h, m, 0, 0);
+      const end = new Date(start.getTime() + 30 * 60 * 1000);
+      const res = await fetch("/api/calendar-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          summary: `Rencontre SENEFOOD — ${selectedType?.label ?? form.meeting_type}`,
+          description: `Type: ${selectedType?.label}\nContact: ${form.name} (${form.email}, ${form.phone})${form.company ? `\nEntreprise: ${form.company}` : ""}${form.country ? `\nPays: ${form.country}` : ""}${form.description ? `\n\nBesoin:\n${form.description}` : ""}`,
+          location: "SENEFOOD — Dakar, Sénégal",
+          startISO: start.toISOString(),
+          endISO: end.toISOString(),
+          timeZone: "Africa/Dakar",
+          attendeeEmail: form.email,
+          attendeeName: form.name,
+        }),
+      });
+      const json = await res.json();
+      if (res.ok && json.htmlLink) {
+        setEventLink(json.htmlLink);
+        toast.success("Rendez-vous confirmé et ajouté à Google Calendar !");
+      } else {
+        toast.success("Votre rendez-vous a été enregistré !");
+      }
+    } catch {
+      toast.success("Votre rendez-vous a été enregistré !");
+    }
+
+    setSubmitting(false);
     setDone(true);
   };
 
