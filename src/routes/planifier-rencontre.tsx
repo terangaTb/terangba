@@ -571,11 +571,12 @@ function StepReview({ form, selectedType }: { form: FormState; selectedType?: ty
 }
 
 function ConfirmationView({
-  form, selectedType, gcalLink,
+  form, selectedType, gcalLink, eventCreated,
 }: {
   form: FormState;
   selectedType?: typeof MEETING_TYPES[number];
   gcalLink: string;
+  eventCreated?: boolean;
 }) {
   const dateStr = form.preferred_date
     ? form.preferred_date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
@@ -587,8 +588,11 @@ function ConfirmationView({
       </div>
       <h2 className="mt-5 font-display text-3xl font-bold">Rendez-vous confirmé !</h2>
       <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-        Merci {form.name?.split(" ")[0]}. Un email de confirmation va vous être envoyé à <span className="font-medium text-foreground">{form.email}</span>.
-        Notre équipe reviendra vers vous rapidement.
+        Merci {form.name?.split(" ")[0]}.{" "}
+        {eventCreated
+          ? <>L'événement a été créé dans Google Calendar et une invitation a été envoyée à <span className="font-medium text-foreground">{form.email}</span>.</>
+          : <>Une confirmation va vous être envoyée à <span className="font-medium text-foreground">{form.email}</span>.</>}
+        {" "}Notre équipe reviendra vers vous rapidement.
       </p>
 
       <div className="mx-auto mt-8 max-w-xl rounded-xl border border-border/60 bg-secondary/40 p-5 text-left">
@@ -601,7 +605,7 @@ function ConfirmationView({
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
         <a href={gcalLink} target="_blank" rel="noopener noreferrer">
           <Button className="rounded-full bg-primary hover:bg-primary/90 transition-transform hover:scale-105">
-            <CalendarDays className="h-4 w-4" /> Ajouter à Google Calendar
+            <CalendarDays className="h-4 w-4" /> {eventCreated ? "Voir l'événement Calendar" : "Ajouter à Google Calendar"}
           </Button>
         </a>
         <Link to="/">
