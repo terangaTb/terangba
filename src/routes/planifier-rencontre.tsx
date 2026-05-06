@@ -104,6 +104,7 @@ function PlanifierRencontre() {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [eventLink, setEventLink] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>({
     meeting_type: "",
     preferred_date: undefined,
@@ -168,10 +169,43 @@ function PlanifierRencontre() {
     });
     setSubmitting(false);
     if (error) {
+      setSubmitting(false);
       toast.error("Erreur lors de l'enregistrement. Réessayez.");
       return;
     }
-    toast.success("Votre rendez-vous a été enregistré !");
+
+    // Create Google Calendar event
+    try {
+      const [h, m] = form.time_slot.split(":").map(Number);
+      const start = new Date(form.preferred_date!);
+      start.setHours(h, m, 0, 0);
+      const end = new Date(start.getTime() + 30 * 60 * 1000);
+      const res = await fetch("/api/calendar-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          summary: `Rencontre SENEFOOD — ${selectedType?.label ?? form.meeting_type}`,
+          description: `Type: ${selectedType?.label}\nContact: ${form.name} (${form.email}, ${form.phone})${form.company ? `\nEntreprise: ${form.company}` : ""}${form.country ? `\nPays: ${form.country}` : ""}${form.description ? `\n\nBesoin:\n${form.description}` : ""}`,
+          location: "SENEFOOD — Dakar, Sénégal",
+          startISO: start.toISOString(),
+          endISO: end.toISOString(),
+          timeZone: "Africa/Dakar",
+          attendeeEmail: form.email,
+          attendeeName: form.name,
+        }),
+      });
+      const json = await res.json();
+      if (res.ok && json.htmlLink) {
+        setEventLink(json.htmlLink);
+        toast.success("Rendez-vous confirmé et ajouté à Google Calendar !");
+      } else {
+        toast.success("Votre rendez-vous a été enregistré !");
+      }
+    } catch {
+      toast.success("Votre rendez-vous a été enregistré !");
+    }
+
+    setSubmitting(false);
     setDone(true);
   };
 
@@ -271,7 +305,7 @@ function PlanifierRencontre() {
         <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-border/60 bg-card shadow-[var(--shadow-elegant)] overflow-hidden">
           <div className="p-6 md:p-10">
             {done ? (
-              <ConfirmationView form={form} selectedType={selectedType} gcalLink={gcalLink} />
+              <ConfirmationView form={form} selectedType={selectedType} gcalLink={eventLink ?? gcalLink} eventCreated={!!eventLink} />
             ) : (
               <div key={step} className="animate-fade-in-up">
                 {step === 1 && <StepType form={form} setForm={setForm} />}
@@ -537,11 +571,12 @@ function StepReview({ form, selectedType }: { form: FormState; selectedType?: ty
 }
 
 function ConfirmationView({
-  form, selectedType, gcalLink,
+  form, selectedType, gcalLink, eventCreated,
 }: {
   form: FormState;
   selectedType?: typeof MEETING_TYPES[number];
   gcalLink: string;
+  eventCreated?: boolean;
 }) {
   const dateStr = form.preferred_date
     ? form.preferred_date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
@@ -553,8 +588,11 @@ function ConfirmationView({
       </div>
       <h2 className="mt-5 font-display text-3xl font-bold">Rendez-vous confirmé !</h2>
       <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-        Merci {form.name?.split(" ")[0]}. Un email de confirmation va vous être envoyé à <span className="font-medium text-foreground">{form.email}</span>.
-        Notre équipe reviendra vers vous rapidement.
+        Merci {form.name?.split(" ")[0]}.{" "}
+        {eventCreated
+          ? <>L'événement a été créé dans Google Calendar et une invitation a été envoyée à <span className="font-medium text-foreground">{form.email}</span>.</>
+          : <>Une confirmation va vous être envoyée à <span className="font-medium text-foreground">{form.email}</span>.</>}
+        {" "}Notre équipe reviendra vers vous rapidement.
       </p>
 
       <div className="mx-auto mt-8 max-w-xl rounded-xl border border-border/60 bg-secondary/40 p-5 text-left">
@@ -567,7 +605,7 @@ function ConfirmationView({
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
         <a href={gcalLink} target="_blank" rel="noopener noreferrer">
           <Button className="rounded-full bg-primary hover:bg-primary/90 transition-transform hover:scale-105">
-            <CalendarDays className="h-4 w-4" /> Ajouter à Google Calendar
+            <CalendarDays className="h-4 w-4" /> {eventCreated ? "Voir l'événement Calendar" : "Ajouter à Google Calendar"}
           </Button>
         </a>
         <Link to="/">

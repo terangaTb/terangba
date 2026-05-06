@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as EngagementsStandardsRouteImport } from './routes/engagements.standards'
 import { Route as DebugSsrRouteImport } from './routes/debug.ssr'
+import { Route as ApiCalendarEventRouteImport } from './routes/api/calendar-event'
 import { Route as AideGithubRouteImport } from './routes/aide.github'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
@@ -66,6 +67,11 @@ const DebugSsrRoute = DebugSsrRouteImport.update({
   path: '/debug/ssr',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCalendarEventRoute = ApiCalendarEventRouteImport.update({
+  id: '/api/calendar-event',
+  path: '/api/calendar-event',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AideGithubRoute = AideGithubRouteImport.update({
   id: '/aide/github',
   path: '/aide/github',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
   '/aide/github': typeof AideGithubRoute
+  '/api/calendar-event': typeof ApiCalendarEventRoute
   '/debug/ssr': typeof DebugSsrRoute
   '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin/': typeof AdminIndexRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
   '/aide/github': typeof AideGithubRoute
+  '/api/calendar-event': typeof ApiCalendarEventRoute
   '/debug/ssr': typeof DebugSsrRoute
   '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin': typeof AdminIndexRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
   '/aide/github': typeof AideGithubRoute
+  '/api/calendar-event': typeof ApiCalendarEventRoute
   '/debug/ssr': typeof DebugSsrRoute
   '/engagements/standards': typeof EngagementsStandardsRoute
   '/admin/': typeof AdminIndexRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/admin/login'
     | '/aide/github'
+    | '/api/calendar-event'
     | '/debug/ssr'
     | '/engagements/standards'
     | '/admin/'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/admin/login'
     | '/aide/github'
+    | '/api/calendar-event'
     | '/debug/ssr'
     | '/engagements/standards'
     | '/admin'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/admin/login'
     | '/aide/github'
+    | '/api/calendar-event'
     | '/debug/ssr'
     | '/engagements/standards'
     | '/admin/'
@@ -168,6 +180,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AideGithubRoute: typeof AideGithubRoute
+  ApiCalendarEventRoute: typeof ApiCalendarEventRoute
   DebugSsrRoute: typeof DebugSsrRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -237,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DebugSsrRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/calendar-event': {
+      id: '/api/calendar-event'
+      path: '/api/calendar-event'
+      fullPath: '/api/calendar-event'
+      preLoaderRoute: typeof ApiCalendarEventRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/aide/github': {
       id: '/aide/github'
       path: '/aide/github'
@@ -275,6 +295,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   AdminLoginRoute: AdminLoginRoute,
   AideGithubRoute: AideGithubRoute,
+  ApiCalendarEventRoute: ApiCalendarEventRoute,
   DebugSsrRoute: DebugSsrRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
