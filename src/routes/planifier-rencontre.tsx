@@ -104,6 +104,7 @@ function PlanifierRencontre() {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [eventLink, setEventLink] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>({
     meeting_type: "",
     preferred_date: undefined,
