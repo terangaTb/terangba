@@ -305,7 +305,7 @@ function PlanifierRencontre() {
         <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-border/60 bg-card shadow-[var(--shadow-elegant)] overflow-hidden">
           <div className="p-6 md:p-10">
             {done ? (
-              <ConfirmationView form={form} selectedType={selectedType} gcalLink={gcalLink} />
+              <ConfirmationView form={form} selectedType={selectedType} gcalLink={eventLink ?? gcalLink} eventCreated={!!eventLink} />
             ) : (
               <div key={step} className="animate-fade-in-up">
                 {step === 1 && <StepType form={form} setForm={setForm} />}
