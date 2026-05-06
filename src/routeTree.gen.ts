@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as PlanifierRencontreRouteImport } from './routes/planifier-rencontre'
 import { Route as EngagementsRouteImport } from './routes/engagements'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AProposRouteImport } from './routes/a-propos'
@@ -23,6 +24,11 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanifierRencontreRoute = PlanifierRencontreRouteImport.update({
+  id: '/planifier-rencontre',
+  path: '/planifier-rencontre',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EngagementsRoute = EngagementsRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
   '/engagements': typeof EngagementsRouteWithChildren
+  '/planifier-rencontre': typeof PlanifierRencontreRoute
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
   '/aide/github': typeof AideGithubRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
   '/engagements': typeof EngagementsRouteWithChildren
+  '/planifier-rencontre': typeof PlanifierRencontreRoute
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
   '/aide/github': typeof AideGithubRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/a-propos': typeof AProposRoute
   '/contact': typeof ContactRoute
   '/engagements': typeof EngagementsRouteWithChildren
+  '/planifier-rencontre': typeof PlanifierRencontreRoute
   '/services': typeof ServicesRoute
   '/admin/login': typeof AdminLoginRoute
   '/aide/github': typeof AideGithubRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/a-propos'
     | '/contact'
     | '/engagements'
+    | '/planifier-rencontre'
     | '/services'
     | '/admin/login'
     | '/aide/github'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/a-propos'
     | '/contact'
     | '/engagements'
+    | '/planifier-rencontre'
     | '/services'
     | '/admin/login'
     | '/aide/github'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/a-propos'
     | '/contact'
     | '/engagements'
+    | '/planifier-rencontre'
     | '/services'
     | '/admin/login'
     | '/aide/github'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   AProposRoute: typeof AProposRoute
   ContactRoute: typeof ContactRoute
   EngagementsRoute: typeof EngagementsRouteWithChildren
+  PlanifierRencontreRoute: typeof PlanifierRencontreRoute
   ServicesRoute: typeof ServicesRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AideGithubRoute: typeof AideGithubRoute
@@ -166,6 +179,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planifier-rencontre': {
+      id: '/planifier-rencontre'
+      path: '/planifier-rencontre'
+      fullPath: '/planifier-rencontre'
+      preLoaderRoute: typeof PlanifierRencontreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/engagements': {
@@ -251,6 +271,7 @@ const rootRouteChildren: RootRouteChildren = {
   AProposRoute: AProposRoute,
   ContactRoute: ContactRoute,
   EngagementsRoute: EngagementsRouteWithChildren,
+  PlanifierRencontreRoute: PlanifierRencontreRoute,
   ServicesRoute: ServicesRoute,
   AdminLoginRoute: AdminLoginRoute,
   AideGithubRoute: AideGithubRoute,
