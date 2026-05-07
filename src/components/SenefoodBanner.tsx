@@ -2,8 +2,14 @@ import { Calendar, MapPin, ArrowRight, Users, Building2, Briefcase, Eye, Trophy 
 import { Link } from "@tanstack/react-router";
 import senefoodImg from "@/assets/senefood-2026.jpg";
 import { AnimatedStat } from "@/components/AnimatedStat";
+import { useInView } from "@/hooks/use-in-view";
 
 export function SenefoodBanner() {
+  const blobs = useInView<HTMLDivElement>(0.15);
+  const heading = useInView<HTMLDivElement>(0.4);
+  const divider = useInView<HTMLDivElement>(0.6);
+  const slogan = useInView<HTMLDivElement>(0.3);
+
   return (
     <section className="relative overflow-hidden border-y border-border bg-gradient-to-br from-secondary/60 via-background to-secondary/40">
       {/* Marquee top strip */}
@@ -97,13 +103,23 @@ export function SenefoodBanner() {
       </div>
 
       {/* SENEFOOD — Chiffres clés */}
-      <div className="relative overflow-hidden border-t border-border/60 bg-background/60 backdrop-blur">
-        {/* Decorative animated blobs */}
-        <div className="pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full bg-primary/10 blur-3xl animate-float-slow" />
-        <div className="pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full bg-gold/10 blur-3xl animate-float-slow [animation-delay:1.5s]" />
+      <div ref={blobs.ref} className="relative overflow-hidden border-t border-border/60 bg-background/60 backdrop-blur">
+        {/* Decorative animated blobs — fade & scale in on scroll */}
+        <div
+          className={`pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full bg-primary/10 blur-3xl animate-float-slow transition-all duration-[1400ms] ease-out ${
+            blobs.inView ? "opacity-100 scale-100" : "opacity-0 scale-50"
+          }`}
+        />
+        <div
+          className={`pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full bg-gold/10 blur-3xl animate-float-slow [animation-delay:1.5s] transition-all duration-[1400ms] delay-200 ease-out ${
+            blobs.inView ? "opacity-100 scale-100" : "opacity-0 scale-50"
+          }`}
+        />
         {/* Subtle dot grid */}
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          className={`pointer-events-none absolute inset-0 transition-opacity duration-[1600ms] ${
+            blobs.inView ? "opacity-[0.04]" : "opacity-0"
+          }`}
           style={{
             backgroundImage:
               "radial-gradient(circle, currentColor 1px, transparent 1px)",
@@ -112,11 +128,24 @@ export function SenefoodBanner() {
         />
 
         <div className="container relative mx-auto px-4 py-16">
-          <div className="mx-auto max-w-2xl text-center animate-fade-in-up">
+          <div
+            ref={heading.ref}
+            className={`mx-auto max-w-2xl text-center transition-all duration-1000 ease-out ${
+              heading.inView ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+            }`}
+          >
             <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gold">
-              <span className="h-px w-8 bg-gold" />
+              <span
+                className={`h-px bg-gold transition-all duration-700 delay-200 ${
+                  heading.inView ? "w-8 opacity-100" : "w-0 opacity-0"
+                }`}
+              />
               SENEFOOD & SENEPACK — En chiffres
-              <span className="h-px w-8 bg-gold" />
+              <span
+                className={`h-px bg-gold transition-all duration-700 delay-200 ${
+                  heading.inView ? "w-8 opacity-100" : "w-0 opacity-0"
+                }`}
+              />
             </span>
             <h3 className="mt-4 font-display text-2xl font-bold leading-tight md:text-4xl">
               Le rendez-vous incontournable de{" "}
@@ -124,7 +153,12 @@ export function SenefoodBanner() {
                 l'agro-industrie ouest-africaine
               </span>
             </h3>
-            <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-[image:var(--gradient-gold)]" />
+            <div
+              ref={divider.ref}
+              className={`mx-auto mt-4 h-1 rounded-full bg-[image:var(--gradient-gold)] transition-all duration-1000 ease-out ${
+                divider.inView ? "w-16 opacity-100" : "w-0 opacity-0"
+              }`}
+            />
           </div>
 
           <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-5 md:gap-6">
@@ -139,11 +173,34 @@ export function SenefoodBanner() {
             ))}
           </div>
 
-          {/* Slogan */}
-          <div className="group relative mt-14 overflow-hidden rounded-2xl bg-[image:var(--gradient-primary)] px-6 py-12 text-center shadow-[var(--shadow-elegant)] md:px-12">
-            <div className="pointer-events-none absolute -top-16 -left-16 h-48 w-48 rounded-full bg-gold/20 blur-2xl transition-transform duration-700 group-hover:scale-125" />
-            <div className="pointer-events-none absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-gold/20 blur-2xl transition-transform duration-700 group-hover:scale-125" />
-            <p className="relative font-display text-2xl font-bold leading-tight text-primary-foreground md:text-4xl">
+          {/* Slogan — animated reveal */}
+          <div
+            ref={slogan.ref}
+            className={`group relative mt-14 overflow-hidden rounded-2xl bg-[image:var(--gradient-primary)] px-6 py-12 text-center shadow-[var(--shadow-elegant)] transition-all duration-1000 ease-out md:px-12 ${
+              slogan.inView ? "translate-y-0 scale-100 opacity-100" : "translate-y-12 scale-95 opacity-0"
+            }`}
+          >
+            <div
+              className={`pointer-events-none absolute -top-16 -left-16 h-48 w-48 rounded-full bg-gold/20 blur-2xl transition-all duration-[1400ms] delay-300 ease-out group-hover:scale-150 ${
+                slogan.inView ? "opacity-100 scale-100" : "opacity-0 scale-50"
+              }`}
+            />
+            <div
+              className={`pointer-events-none absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-gold/20 blur-2xl transition-all duration-[1400ms] delay-500 ease-out group-hover:scale-150 ${
+                slogan.inView ? "opacity-100 scale-100" : "opacity-0 scale-50"
+              }`}
+            />
+            {/* Shine sweep on reveal */}
+            <div
+              className={`pointer-events-none absolute inset-y-0 -inset-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-[1800ms] delay-700 ${
+                slogan.inView ? "translate-x-full" : "translate-x-0"
+              }`}
+            />
+            <p
+              className={`relative font-display text-2xl font-bold leading-tight text-primary-foreground transition-all duration-1000 delay-300 md:text-4xl ${
+                slogan.inView ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+              }`}
+            >
               « Plus qu'un partenaire,{" "}
               <span className="bg-[image:var(--gradient-gold)] bg-clip-text text-transparent">
                 nous construisons ensemble !
