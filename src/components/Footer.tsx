@@ -33,7 +33,17 @@ export function Footer() {
           <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-foreground">Contact</h4>
           <ul className="space-y-3 text-sm text-muted-foreground">
             <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-gold" /><span>4P - 6, Imm. Elh Omar DIA, Boulevard de l'Est x Rue 9, Point E, Dakar (SN)</span></li>
-            <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-gold" /><span>+221 78 307 36 36</span></li>
+            <li className="flex items-center gap-2">
+              <Phone className="h-4 w-4 text-gold" />
+              <a
+                href="https://wa.me/221783073636"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary"
+              >
+                +221 78 307 36 36
+              </a>
+            </li>
             <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-gold" /><span>contact@terangabridgeafrica.com</span></li>
           </ul>
         </div>
