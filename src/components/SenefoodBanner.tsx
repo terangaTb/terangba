@@ -5,6 +5,11 @@ import { AnimatedStat } from "@/components/AnimatedStat";
 import { useInView } from "@/hooks/use-in-view";
 
 export function SenefoodBanner() {
+  const blobs = useInView<HTMLDivElement>(0.15);
+  const heading = useInView<HTMLDivElement>(0.4);
+  const divider = useInView<HTMLDivElement>(0.6);
+  const slogan = useInView<HTMLDivElement>(0.3);
+
   return (
     <section className="relative overflow-hidden border-y border-border bg-gradient-to-br from-secondary/60 via-background to-secondary/40">
       {/* Marquee top strip */}
