@@ -199,36 +199,8 @@ function About() {
       </section>
 
       {/* Notre histoire */}
-      <section className="container mx-auto px-4 py-20 cv-auto">
-        <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
-          <div className="lg:col-span-5">
-            <span className="text-xs font-bold uppercase tracking-widest text-gold">
-              Notre histoire
-            </span>
-            <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
-              Une vision née de l'hospitalité sénégalaise
-            </h2>
-          </div>
-          <div className="space-y-5 text-muted-foreground lg:col-span-7">
-            <p className="text-lg leading-relaxed">
-              <strong className="text-foreground">Teranga Bridge Africa</strong> est née de la
-              conviction que l'Afrique mérite un approvisionnement industriel à la hauteur de ses
-              ambitions. Le mot <em>Teranga</em>, qui incarne l'hospitalité sénégalaise, guide
-              chacune de nos relations clients et partenaires.
-            </p>
-            <p className="leading-relaxed">
-              Nous accompagnons les industriels africains dans la sécurisation de leurs flux de
-              matières premières et d'équipements agroalimentaires. Grâce à un réseau international
-              soigneusement sélectionné, nous garantissons qualité, traçabilité et compétitivité —
-              du sourcing à la livraison sur site.
-            </p>
-            <p className="leading-relaxed">
-              Notre ancrage local, combiné à une expertise globale, fait de nous le pont naturel
-              entre les producteurs internationaux et les transformateurs africains.
-            </p>
-          </div>
-        </div>
-      </section>
+      <OurStory />
+
 
       {/* Mission / Vision / Valeurs */}
       <section className="bg-secondary/30 py-20 cv-auto">
