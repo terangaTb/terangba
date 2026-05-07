@@ -2,6 +2,7 @@ import { Calendar, MapPin, ArrowRight, Users, Building2, Briefcase, Eye, Trophy 
 import { Link } from "@tanstack/react-router";
 import senefoodImg from "@/assets/senefood-2026.jpg";
 import { AnimatedStat } from "@/components/AnimatedStat";
+import { useInView } from "@/hooks/use-in-view";
 
 export function SenefoodBanner() {
   return (
