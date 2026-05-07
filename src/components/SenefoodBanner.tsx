@@ -1,6 +1,7 @@
 import { Calendar, MapPin, ArrowRight, Users, Building2, Briefcase, Eye, Trophy } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import senefoodImg from "@/assets/senefood-2026.jpg";
+import { AnimatedStat } from "@/components/AnimatedStat";
 
 export function SenefoodBanner() {
   return (
