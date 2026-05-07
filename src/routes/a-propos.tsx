@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
+import { OurStory } from "@/components/OurStory";
 import aboutHero from "@/assets/about-hero-1280.jpg";
 import aboutHero768Webp from "@/assets/about-hero-768.webp";
 import aboutHero1280Webp from "@/assets/about-hero-1280.webp";
