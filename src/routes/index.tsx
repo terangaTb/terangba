@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { SenefoodBanner } from "@/components/SenefoodBanner";
+import Stats3D from "@/components/Stats3D";
 import heroImg from "@/assets/hero.jpg";
 import videoPoster from "@/assets/video-poster.jpg";
 import { ArrowRight, Package, Truck, Wrench, Globe2, Lightbulb, ShieldCheck, CheckCircle2, Star, Quote, Building2, Factory, Wheat, Beef, Cookie, Milk } from "lucide-react";
@@ -160,21 +161,7 @@ function Home() {
       </section>
 
       {/* Stats */}
-      <section className="border-y border-border bg-secondary/40">
-        <div className="container mx-auto grid grid-cols-2 gap-6 px-4 py-10 md:grid-cols-4">
-          {[
-            { v: "15+", l: "Pays desservis" },
-            { v: "200+", l: "Clients industriels" },
-            { v: "50+", l: "Partenaires fiables" },
-            { v: "24/7", l: "Support client" },
-          ].map((s) => (
-            <div key={s.l} className="text-center">
-              <div className="font-display text-3xl font-bold text-primary md:text-4xl">{s.v}</div>
-              <div className="mt-1 text-sm text-muted-foreground">{s.l}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <Stats3D />
 
       {/* Services preview */}
       <section id="services" className="container mx-auto px-4 py-20 scroll-mt-20">
